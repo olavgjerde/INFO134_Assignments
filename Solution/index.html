@@ -1,47 +1,84 @@
-<!DOCTYPE html>
-<html lang="en" dir="ltr">
+﻿<!DOCTYPE html>
+<html lang="no">
 
 <head>
-  <meta charset="utf-8">
-  <title>Folk</title>
-  <link rel="stylesheet" type="text/css" media="screen" href="css/folk.css">
-  <!-- js being loaded later with defer-->
-  <script defer src="folk.js" charset="utf-8"></script>
+    <meta charset="utf-8">
+    <title>Folk</title>
+    <link rel="stylesheet" type="text/css" href="css/folk.css">
+    <script defer src="js/folk.js" charset="utf-8"></script>
 </head>
 
-<body>
-  <!-- Header -->
-  <header id="banner">
-    <span>🚶Folk</span>
-    <nav>
-      <button id="introButton">Introduction</button>
-      <button id="overviewButton">Overview</button>
-      <button id="detailsButton">Details</button>
-      <button id="comparisonButton">Comparison</button>
-    </nav>
-  </header>
-  <!-- Main -->
-  <div class="container">
-    <div class="introduction">
-      <h1>Velkommen</h1>
-      <p>Dette er en paragraf</p>
-    </div>
-    <div class="overview">
-      <h1>Oversikt</h1>
-    </div>
-    <div class="details">
-      <h1>Detaljer</h1>
+<body onload="init();">
+    <!-- Header -->
+    <header id="banner">
+        <span>🚶 Folk</span>
+        <nav>
+            <button id="introButton">Introduksjon</button>
+            <button id="overviewButton">Oversikt</button>
+            <button id="detailsButton">Detaljer</button>
+            <button id="comparisonButton">Sammenligning</button>
+        </nav>
+    </header>
+
+    <!-- Main content -->
+    <div id="contentContainer">
+        <section id="introduction">
+            <h1>Velkommen</h1>
+            <p>
+                Bacon ipsum dolor amet pork loin bacon beef ribs flank cupim pastrami porchetta,
+                frankfurter chuck t-bone shoulder ham hock swine capicola.
+                T-bone pig flank tri-tip salami, kevin ground round andouille short
+                loin cow turkey alcatra landjaeger tenderloin.
+                Chicken pig pancetta, pork loin meatloaf shank pork chop spare ribs.
+                Shank jerky venison t-bone. Landjaeger chuck drumstick shank,
+                chicken turkey t-bone tail bacon shoulder cupim porchetta.
+            </p>
+        </section>
+
+        <section id="overview">
+            <h1>Oversikt</h1>
+            <p>
+                Bacon ipsum dolor amet pork loin bacon beef ribs flank cupim pastrami porchetta,
+                frankfurter chuck t-bone shoulder ham hock swine capicola.
+                T-bone pig flank tri-tip salami, kevin ground round andouille short
+                loin cow turkey alcatra landjaeger tenderloin.
+                Chicken pig pancetta, pork loin meatloaf shank pork chop spare ribs.
+                Shank jerky venison t-bone. Landjaeger chuck drumstick shank,
+                chicken turkey t-bone tail bacon shoulder cupim porchetta.
+            </p>
+        </section>
+
+        <section id="details">
+            <h1>Detaljer</h1>
+            <p>
+                Bacon ipsum dolor amet pork loin bacon beef ribs flank cupim pastrami porchetta,
+                frankfurter chuck t-bone shoulder ham hock swine capicola.
+                T-bone pig flank tri-tip salami, kevin ground round andouille short
+                loin cow turkey alcatra landjaeger tenderloin.
+                Chicken pig pancetta, pork loin meatloaf shank pork chop spare ribs.
+                Shank jerky venison t-bone. Landjaeger chuck drumstick shank,
+                chicken turkey t-bone tail bacon shoulder cupim porchetta.
+            </p>
+        </section>
+
+        <section id="comparison">
+            <h1>Sammenlikning</h1>
+            <p>
+                Bacon ipsum dolor amet pork loin bacon beef ribs flank cupim pastrami porchetta,
+                frankfurter chuck t-bone shoulder ham hock swine capicola.
+                T-bone pig flank tri-tip salami, kevin ground round andouille short
+                loin cow turkey alcatra landjaeger tenderloin.
+                Chicken pig pancetta, pork loin meatloaf shank pork chop spare ribs.
+                Shank jerky venison t-bone. Landjaeger chuck drumstick shank,
+                chicken turkey t-bone tail bacon shoulder cupim porchetta.
+            </p>
+        </section>
     </div>
 
-    <div class="comparison">
-      <h1>Sammenlikning</h1>
-    </div>
-  </div>
-  <!-- Footer with project info -->
-  <footer>
-    <p>Project info here</p>
-  </footer>
-
+    <!-- Footer with project info -->
+    <footer>
+        <p>INFO134 Semester Assignment: Folk</p>
+    </footer>
 </body>
 
 </html>
