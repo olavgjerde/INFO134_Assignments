@@ -11,3 +11,4 @@ horisontalt. Forklar hvordan dere har løst dette. (Henvis gjerne til CSS-koden 
 4. Har alle tre datasett nøyaktig de samme kommunene? Forklar kort hvordan dere fant dette svaret. Dere
 trenger ikke å legge ved ekstra kode hvis dere har skrevet kode for å svare på dette spørsmålet, men bare
 forklare fremgangsmåten deres.
+  

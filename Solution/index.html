@@ -4,27 +4,44 @@
 <head>
   <meta charset="utf-8">
   <title>Folk</title>
-  <link rel="stylesheet" href="/css/folk.css">
+  <link rel="stylesheet" type="text/css" media="screen" href="css/folk.css">
+  <!-- js being loaded later with defer-->
+  <script defer src="folk.js" charset="utf-8"></script>
 </head>
 
 <body>
-  <header>
-
+  <!-- Header -->
+  <header id="banner">
+    <span>🚶Folk</span>
+    <nav>
+      <button id="introButton">Introduction</button>
+      <button id="overviewButton">Overview</button>
+      <button id="detailsButton">Details</button>
+      <button id="comparisonButton">Comparison</button>
+    </nav>
   </header>
-  <div class="">
-    <div class="">
-
+  <!-- Main -->
+  <div class="container">
+    <div class="introduction">
+      <h1>Velkommen</h1>
+      <p>Dette er en paragraf</p>
     </div>
-    <div class="">
-
+    <div class="overview">
+      <h1>Oversikt</h1>
     </div>
-    <div class="">
+    <div class="details">
+      <h1>Detaljer</h1>
+    </div>
 
+    <div class="comparison">
+      <h1>Sammenlikning</h1>
     </div>
   </div>
-  <footer></footer>
+  <!-- Footer with project info -->
+  <footer>
+    <p>Project info here</p>
+  </footer>
 
-  <script src="folk.js" charset="utf-8"></script>
 </body>
 
 </html>
