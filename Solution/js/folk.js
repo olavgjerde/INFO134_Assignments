@@ -4,10 +4,7 @@ let detailsSection = document.getElementById("details");
 let comparisonSection = document.getElementById("comparison");
 let sectionList = [introSection, overviewSection, detailsSection, comparisonSection];
 
-let introNavButton = document.getElementById("introButton");
-let detailsNavButton = document.getElementById("detailsButton");
-let overviewNavButton = document.getElementById("overviewButton");
-let comparisonNavButton = document.getElementById("comparisonButton");
+let populationData, employmentData, educationData;
 
 /**
  * Sets the initial condition for the application
@@ -15,16 +12,16 @@ let comparisonNavButton = document.getElementById("comparisonButton");
  *  - Adding eventlisteners where needed
  */
 function init() {
-    introNavButton.addEventListener("click", function() {
+    document.getElementById("introButton").addEventListener("click", function() {
 	    toggleSectionVisibility(introSection);
     });
-    detailsNavButton.addEventListener("click", function() {
+    document.getElementById("detailsButton").addEventListener("click", function() {
 	    toggleSectionVisibility(detailsSection);
     });
-    overviewNavButton.addEventListener("click", function() {
+    document.getElementById("overviewButton").addEventListener("click", function() {
 	    toggleSectionVisibility(overviewSection);
     });
-    comparisonNavButton.addEventListener("click", function() {
+    document.getElementById("comparisonButton").addEventListener("click", function() {
 	    toggleSectionVisibility(comparisonSection);
     });
 
@@ -45,4 +42,15 @@ function toggleSectionVisibility(targetSection) {
 	        sectionInList.classList.add("hiddenSection");
         }
     }
+}
+
+function fetchPopulationData() {
+	let request = new XMLHttpRequest();
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+	        populationData = JSON.parse(request.responseText);
+        }
+    }
+    request.open("GET", "http://wildboy.uib.no/~tpe056/folk/104857.json");
+    request.send();
 }

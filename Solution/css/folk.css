@@ -37,12 +37,10 @@ body, html {
 }
 
 #banner button {
-    /*Normalize button style*/
-    font-size: 100%;
+    font-size: 1.5em;
     font-family: inherit;
     border: 0;
     padding: 0;
-    /*Our custom style*/
     font-weight: bold;
     flex-grow: 2;
     color: inherit;
@@ -75,4 +73,16 @@ footer {
 
 .hiddenSection {
     display: none;
+}
+
+
+table,
+td {
+    border: 1px solid #333;
+}
+
+thead,
+tfoot {
+    background-color: #333;
+    color: #fff;
 }
