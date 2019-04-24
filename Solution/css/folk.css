@@ -47,6 +47,27 @@ body, html {
     background-color: inherit;
 }
 
+#ssbButtons button{
+    background-color: #37403E; /* Green */
+    border: none;
+    color:#DBFFF8;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px; 
+    margin: 0.5em;
+  
+    flex-direction: row;
+    justify-content: center;
+
+}
+
+#ssbButtons button:hover{
+    transition: 0.75s;
+    color: #37403E;
+    background-color: #C8E8E2;
+}
+
 #banner button:hover {
     transition: 0.75s;
     color: #37403E;

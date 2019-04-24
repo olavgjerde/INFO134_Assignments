@@ -21,16 +21,26 @@
         </nav>
     </header>
 
-  
 
     <!-- Main content -->
     <div id="contentContainer">
         <section id="introduction">
             <h1>Velkommen</h1>
             <p>
-                Dette er et verktøy for å vise data om Norges befolkning. 
+                Dette er et verktøy for å vise data om Norges befolkning. Under oversikt finner du alle kommunene med navn, kommunenummer, og siste måling av total befolkning. 
+                Under Detaljer så kan du finne kommunens navn, kommunenummer, siste målte befolkning, siste målte statistikk for sysselseting
+                og høyere utdanning hvis du skriver inn kommunenummer. Kan også få se historisk utvikling. Under sammenligning så kan du 
+                vise og sammenligne historisk data for utvikling av sysselsetting for kjønnskategoriene “Menn” og “Kvinner” i begge kommunene. 
             </p>
+            <br>
+            <h3>SSBs offisielle sider med data vi har brukt i denne tjenesten</h3>
             <p>OBS: <b>Dataene kan inneholde feil.</b> Alle datasettene er i utgangspunktet hentet fra SSB, men noen detaljer er fjernet. Dataene inneholder derfor noen unøyaktigheter.</p>
+            <div id="ssbButtons">
+                <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/104857?lang=no';">Befolkning: Datasett nummer 104857</button>
+                <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/100145?lang=no';">Sysselsatte: Datasett nummer 100145</button>
+                <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/85432?lang=no';">Utdanning: Datasett nummer 85432</button>
+
+            </div>
         </section>
 
         <section id="overview">
