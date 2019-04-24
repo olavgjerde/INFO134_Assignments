@@ -1,19 +1,19 @@
 function Dataset(contentUrl) {
     this.contentUrl = contentUrl;
+    this.nameList = [];
+    this.idList = [];
     this.datasetDict = {};
 }
 
 Dataset.prototype = {
-    getNames: function* () {
-        for (let id in this.datasetDict) {
-            yield this.datasetDict[id]["name"];
-        }
+    getNames: function () {
+        return this.nameList;
     },
     getIDs: function () {
-        return Object.keys(this.datasetDict);
+        return this.idList;
     },
-    getInfo: function (id) {
-        return this.datasetDict[id];
+    getInfo: function (districtId) {
+        return this.datasetDict[districtId];
     },
     /**
      * Parses a response-object from the load-function into an object
@@ -23,17 +23,35 @@ Dataset.prototype = {
      * @param responseObject object that will be parsed (see load function)
      */
     parseContent: function (responseObject) {
-        let contentRoot = responseObject["elementer"];
-        for (let id in contentRoot) {
-            let menObj = contentRoot[id]["Menn"];
-            let womenObj = contentRoot[id]["Kvinner"];
-            // This assumes correct order within json (asc. by year)
-            let menValue = menObj[Object.keys(menObj)[Object.keys(menObj).length - 1]];
-            let womenValue = womenObj[Object.keys(womenObj)[Object.keys(womenObj).length - 1]];
-            this.datasetDict[contentRoot[id]["kommunenummer"]] = {
-                "name": id,
-		        "men": menValue,
-                "women": womenValue
+        let rootElement = responseObject["elementer"];
+        for (let districtName in rootElement) {
+            let districtId = rootElement[districtName]["kommunenummer"];
+            this.nameList.push(districtName);
+            this.idList.push(districtId);
+
+            // section spesific to educational data
+            // continue here: better to refactor into separate type?
+            // for (let key in rootElement[districtName]) {
+            //     if (key == "kommunenummer") continue;
+            //     let eduType = educationMapper[key];
+            //     let eduObject = {}
+            //     eduObject[eduType] = {
+            //         "men": rootElement[districtName][key]["Menn"],
+            //         "women": rootElement[districtName][key]["Women"]
+            //     }
+            //     this.datasetDict[districtId] += eduObject;
+            // }
+            
+            // section not dependant on dataset-type
+            this.datasetDict[districtId] = {
+                 "name": districtName,
+		         "men": rootElement[districtName]["Menn"],
+                 "women": rootElement[districtName]["Kvinner"],
+                 "combo": rootElement[districtName]["Begge kjønn"],
+                 // These functions assume correct order within json (asc. by year)
+                 "menLatest": function () { return this.men[Object.keys(this.men)[Object.keys(this.men).length - 1]]},
+                 "womenLatest": function() { return this.women[Object.keys(this.women)[Object.keys(this.women).length - 1]]},
+                 "comboLatest": function() { if (this.combo) return this.combo[Object.keys(this.combo)[Object.keys(this.combo).length - 1]]}
             }
         }
         if (this.onload) this.onload();
@@ -43,11 +61,7 @@ Dataset.prototype = {
      * the objects initialization.
      */
     load: function () {
-        // TODO:
-	    // 1. disable navigation
-        // 2. set loading message
-
-        // 3. fetch dataset and ready the object:
+        // TODO: 1. disable navigation | 2. set loading message
         let proto = this;
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
@@ -60,4 +74,13 @@ Dataset.prototype = {
         request.send();
     },
     onload: null
+}
+
+const educationMapper = {
+    "01": "primarySchool",
+    "02a": "highSchool",
+    "03a": "higherShort",
+    "04a": "higherLong",
+    "09a": "undefinedEdu",
+    "11": "vocational"
 }
