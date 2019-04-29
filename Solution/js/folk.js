@@ -4,11 +4,19 @@ let detailsSection = document.getElementById("details");
 let comparisonSection = document.getElementById("comparison");
 let sectionList = [introSection, overviewSection, detailsSection, comparisonSection];
 let populationData, employmentData, educationData;
+
 const FetchType = {
     "population": "http://wildboy.uib.no/~tpe056/folk/104857.json",
     "employment": "http://wildboy.uib.no/~tpe056/folk/100145.json",
     "education": "http://wildboy.uib.no/~tpe056/folk/85432.json"
 };
+
+/**
+ * Statistical year ranges for datasets.
+ * Population: 2007 - 2018, Employment: 2005 - 2018, Education: 1970 - 2017
+ * Hence an intersection is: 2007 - 2017
+ */
+const yearIntersection = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017];
 
 /**
  * Sets the initial condition for the application
@@ -27,7 +35,8 @@ function init() {
         toggleSectionVisibility(detailsSection);
         if (!populationData) fetchPopulationData();
         if (!employmentData) fetchEmploymentData();
-        // if (!educationData) fetchEducationData();
+        if (!educationData) fetchEducationData();
+        filterStatisticYears(populateDetails, employmentData, educationData);
     }
     document.getElementById("comparisonButton").onclick = function () {
         toggleSectionVisibility(comparisonSection);
@@ -42,19 +51,19 @@ function init() {
 }
 
 function fetchPopulationData(onloadFunction) {
-    populationData = new Dataset(FetchType.population);
+    populationData = new SharedDataset(FetchType.population);
     populationData.onload = onloadFunction;
     populationData.load();
 }
 
 function fetchEmploymentData(onloadFunction) {
-    employmentData = new Dataset(FetchType.employment);
+    employmentData = new SharedDataset(FetchType.employment);
     employmentData.onload = onloadFunction;
     employmentData.load();
 }
 
 function fetchEducationData(onloadFunction) {
-    educationData = new Dataset(FetchType.education);
+    educationData = new EduDataset(FetchType.education);
     educationData.onload = onloadFunction;
     educationData.load();
 }
@@ -104,10 +113,19 @@ function populateDetails() {
     //TODO: throw error if drisctrictId not a number || not available
     let disPopulationData = populationData.getInfo(disctrictId);
     let disEmploymentData = employmentData.getInfo(disctrictId);
+    let disEducationData = educationData.getInfo(disctrictId);
 
     document.getElementById("dName").innerText = disPopulationData.name;
     document.getElementById("dNum").innerText = disctrictId
-    document.getElementById("dPopulation").innerText = disPopulationData.menLatest() + disPopulationData.womenLatest();
+
+    let populationCount = disPopulationData.menLatest() + disPopulationData.womenLatest();
+    document.getElementById("dPopulation").innerText = populationCount;
+
     document.getElementById("dEmploy").innerText = disEmploymentData.comboLatest() + "%";
+
+    //TODO: account for year intersection.
+    let higherEduPercent = disEducationData.higherLong.womenLatest() + disEducationData.higherLong.menLatest();
+    let higherEduCount = Math.floor((populationCount / 100) * higherEduPercent);
+    document.getElementById("dEducate").innerText = higherEduCount + " | " + higherEduPercent + "%";
     //TODO: add additional data 
 }

@@ -1,11 +1,11 @@
-function Dataset(contentUrl) {
+function EduDataset(contentUrl) {
     this.contentUrl = contentUrl;
     this.nameList = [];
     this.idList = [];
     this.datasetDict = {};
 }
 
-Dataset.prototype = {
+EduDataset.prototype = {
     getNames: function () {
         return this.nameList;
     },
@@ -18,7 +18,7 @@ Dataset.prototype = {
     /**
      * Parses a response-object from the load-function into an object
      * where the municipality-codes are the keys and the values for every key are:
-     * name of municipality, statistics for men, and statistics for women.
+     * name of municipality and statistics for men & women sorted into education category.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
      */
@@ -29,30 +29,24 @@ Dataset.prototype = {
             this.nameList.push(districtName);
             this.idList.push(districtId);
 
-            // section spesific to educational data
-            // continue here: better to refactor into separate type?
-            // for (let key in rootElement[districtName]) {
-            //     if (key == "kommunenummer") continue;
-            //     let eduType = educationMapper[key];
-            //     let eduObject = {}
-            //     eduObject[eduType] = {
-            //         "men": rootElement[districtName][key]["Menn"],
-            //         "women": rootElement[districtName][key]["Women"]
-            //     }
-            //     this.datasetDict[districtId] += eduObject;
-            // }
-            
-            // section not dependant on dataset-type
-            this.datasetDict[districtId] = {
-                 "name": districtName,
-		         "men": rootElement[districtName]["Menn"],
-                 "women": rootElement[districtName]["Kvinner"],
-                 "combo": rootElement[districtName]["Begge kjønn"],
-                 // These functions assume correct order within json (asc. by year)
-                 "menLatest": function () { return this.men[Object.keys(this.men)[Object.keys(this.men).length - 1]]},
-                 "womenLatest": function() { return this.women[Object.keys(this.women)[Object.keys(this.women).length - 1]]},
-                 "comboLatest": function() { if (this.combo) return this.combo[Object.keys(this.combo)[Object.keys(this.combo).length - 1]]}
+            let containerObject = {}
+            containerObject["name"] = districtName;
+
+            for (let innerKey in rootElement[districtName]) {
+                if (innerKey == "kommunenummer") continue;
+                let eduType = educationMapper[innerKey];
+                containerObject[eduType] = {
+                    "men": rootElement[districtName][innerKey]["Menn"],
+                    "women": rootElement[districtName][innerKey]["Kvinner"],
+                    "menForYear": function(year) { return this.men[year] },
+                    "womenForYear": function(year) { return this.women[year] },
+                    // These functions assume correct order within json (asc. by year)
+                    "menLatest": function () { return this.men[Object.keys(this.men)[Object.keys(this.men).length - 1]]},
+                    "womenLatest": function() { return this.women[Object.keys(this.women)[Object.keys(this.women).length - 1]]},
+                }
             }
+            
+            this.datasetDict[districtId] = containerObject;
         }
         if (this.onload) this.onload();
     },
