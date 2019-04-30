@@ -47,7 +47,7 @@ body, html {
 }
 
 #ssbButtons button {
-    background-color: #37403E; /* Green */
+    background-color: #37403E;
     border: none;
     color:#DBFFF8;
     padding: 15px 32px;
@@ -55,10 +55,8 @@ body, html {
     text-decoration: none;
     font-size: 16px; 
     margin: 0.5em;
-  
     flex-direction: row;
     justify-content: center;
-
 }
 
 #ssbButtons button:hover {
@@ -86,22 +84,23 @@ thead, tfoot {
     color: #DBFFF8;
 }
 
-#detailsHistory {
+#detailsHistory, #compareHistory {
     display: flex;
     flex-wrap: wrap;
 }
 
-#detailsHistory .historyElement {
+.historyElement {
     padding: 1em;
     margin-right: 1em;
     margin-bottom: 1em;
     border-radius: 0.5em;
+    border: solid 2px white;
     box-shadow: 0 8px 10px 0 black;
     color: #DBFFF8;
     background-color: #37403E;
 }
 
-#detailsHistory .historyElement h3 {
+.historyElement h3 {
     margin-top: 0;
 }
 
@@ -115,6 +114,30 @@ footer {
     background-color: #37403E;
 }
 
+/* STYLES FOR DYNAMIC-ONLY ELEMENTS BELOW */
+
 .hiddenSection {
     display: none;
+}
+
+.redBoldText {
+    color: rgb(206, 63, 63);
+    font-weight: bold;
+}
+
+.blueBoldText {
+    color: rgb(0, 102, 255);
+    font-weight: bold;
+}
+
+.greenBoldText {
+    color: rgba(3, 146, 34, 0.911);
+    font-weight: bold;
+}
+
+.errorMessage {
+    padding-left: 1em;
+    padding-right: 1em;
+    font-weight: bold;
+    color: red;
 }

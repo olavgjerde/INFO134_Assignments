@@ -7,16 +7,11 @@ let sectionList = [introSection, overviewSection, detailsSection, comparisonSect
 let populationData, employmentData, educationData;
 let overviewPopulated = false;
 
-// Fetch DOM element to use as a template for history-elements
-let historyContainer = document.getElementById("detailsHistory");
-let historyElementTemplate = historyContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
-
-/**
- * Statistical year ranges for datasets.
- * Population: 2007 - 2018, Employment: 2005 - 2018, Education: 1970 - 2017
- * Hence an intersection is: 2007 - 2017
- */
-const yearIntersection = [2007, 2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017];
+// Fetch DOM element to use as a template for history-elements, for details and comparison section
+let detailHistoryContainer = document.getElementById("detailsHistory");
+let compareHistoryContainer = document.getElementById("compareHistory");
+let detailElementTemplate = detailHistoryContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
+let compareElementTemplate = compareHistoryContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
 
 /**
  * Sets the initial condition for the application
@@ -44,6 +39,7 @@ function init() {
     }
 
     document.getElementById("detailsSubmit").onclick = populateDetails;
+    document.getElementById("compareSubmit").onclick = populateComparison;
 
     overviewSection.classList.toggle("hiddenSection");
     detailsSection.classList.toggle("hiddenSection");
@@ -110,11 +106,18 @@ function populateOverview() {
 }
 
 function populateDetails() {
-    // TODO: Throw error if disctrictId is NaN || Not available    
     let disctrictId = document.getElementById("detailsNumInput").value;
     let disPopulationData = populationData.getInfo(disctrictId);
     let disEmploymentData = employmentData.getInfo(disctrictId);
     let disEducationData = educationData.getInfo(disctrictId);
+
+    // Error-handling for districtId inputs
+    if (!disPopulationData || !disEmploymentData || !disEducationData) {
+        document.getElementById("detailsError").innerText = "Kommune-nummer ikke gyldig";
+        return;
+    } else {
+        document.getElementById("detailsError").innerText = "";
+    }
 
     // LATEST DETAILS SECTION
     document.getElementById("dName").innerText = disPopulationData.name;
@@ -139,9 +142,10 @@ function populateDetails() {
 
     // HISTORY SECTION
     // Remove all history-elements if a new search takes place
-    while (historyContainer.hasChildNodes()) { historyContainer.removeChild(historyContainer.lastChild); }
-
-    yearIntersection.forEach(year => {
+    while (detailHistoryContainer.hasChildNodes()) { detailHistoryContainer.removeChild(detailHistoryContainer.lastChild); }
+    
+    // Loops over data on intersection of years available to all datasets: 2007 - 2017
+    for (let year = 2007; year <= 2017; year++) {
         let populationMen = disPopulationData.menForYear(year);
         let populationWomen = disPopulationData.womenForYear(year);
         
@@ -155,14 +159,69 @@ function populateDetails() {
         let eduCountMen = Math.floor((populationMen / 100) * eduPercentMen);
         let eduCountWomen = Math.floor((populationWomen / 100) * eduPercentWomen);
 
-        let newHistory = historyElementTemplate.cloneNode(true);
-        newHistory.querySelector("#histYear").innerText = year;
-        newHistory.querySelector("#popMen").innerText = populationMen;
-        newHistory.querySelector("#popWomen").innerText = populationWomen;
-        newHistory.querySelector("#empMen").innerText = empCountMen + " / " + empPercentMen;
-        newHistory.querySelector("#empWomen").innerText = empCountWomen + " / " + empPercentWomen;
-        newHistory.querySelector("#eduMen").innerText = eduCountMen + " / " + eduPercentMen;
-        newHistory.querySelector("#eduWomen").innerText = eduCountWomen + " / " + eduPercentWomen;
-        historyContainer.appendChild(newHistory);
-    });
+        let detailBlock = detailElementTemplate.cloneNode(true);
+        detailBlock.querySelector("#histYear").innerText = year;
+        detailBlock.querySelector("#popMen").innerText = populationMen;
+        detailBlock.querySelector("#popWomen").innerText = populationWomen;
+        detailBlock.querySelector("#empMen").innerText = empCountMen + " / " + empPercentMen;
+        detailBlock.querySelector("#empWomen").innerText = empCountWomen + " / " + empPercentWomen;
+        detailBlock.querySelector("#eduMen").innerText = eduCountMen + " / " + eduPercentMen;
+        detailBlock.querySelector("#eduWomen").innerText = eduCountWomen + " / " + eduPercentWomen;
+        detailHistoryContainer.appendChild(detailBlock);
+    }
+}
+
+function populateComparison() {
+    let firstId = document.getElementById("compareNumInputOne").value;
+    let secondId = document.getElementById("compareNumInputTwo").value;
+    let firstDistrict = employmentData.getInfo(firstId);
+    let secondDistrict = employmentData.getInfo(secondId);
+
+    // Error-handling for districtId inputs
+    if (!firstDistrict) {
+        document.getElementById("compareError").innerText = "Første kommune-nummer ikke gyldig";
+        return;
+    } else if (!secondDistrict) {
+        document.getElementById("compareError").innerText = "Andre kommune-nummer ikke gyldig"; 
+        return;
+    } else {
+        document.getElementById("compareError").innerText = "";
+    }
+
+    // Remove all history-elements if a new search takes place
+    while (compareHistoryContainer.hasChildNodes()) { compareHistoryContainer.removeChild(compareHistoryContainer.lastChild); }
+
+    for (let year = 2005; year <= 2018; year++) {
+        let eduPercentMenFirst = firstDistrict.menForYear(year);
+        let eduPercentMenSecond = secondDistrict.menForYear(year);
+        let eduPercentWomenFirst = firstDistrict.womenForYear(year);
+        let eduPercentWomenSecond = secondDistrict.womenForYear(year);
+
+        let compareBlock = compareElementTemplate.cloneNode(true);
+        compareBlock.querySelector("#compareYear").innerText = year;
+        compareBlock.querySelector("#districtOne").innerText = firstDistrict.name;
+        compareBlock.querySelector("#districtTwo").innerText = secondDistrict.name;
+        compareBlock.querySelector("#eduMenOne").innerText = eduPercentMenFirst;
+        compareBlock.querySelector("#eduMenTwo").innerText = eduPercentMenSecond;
+        compareBlock.querySelector("#eduWomenOne").innerText = eduPercentWomenFirst;
+        compareBlock.querySelector("#eduWomenTwo").innerText = eduPercentWomenSecond;
+        compareHistoryContainer.appendChild(compareBlock);
+
+        // Skip comparison if displaying first year (no earlier statistics)
+        if (year != 2005) {
+            let changePointsMenFirst =  eduPercentMenFirst - firstDistrict.menForYear(year - 1);
+            let changePointsMenSecond = eduPercentMenSecond - secondDistrict.menForYear(year - 1);
+            let changePointsWomenFirst = eduPercentWomenFirst - firstDistrict.womenForYear(year - 1);
+            let changePointsWomenSecond = eduPercentWomenSecond - secondDistrict.womenForYear(year - 1);
+            let changePointsDistrictOne = changePointsMenFirst + changePointsMenSecond;
+            let changePointsDistrictTwo = changePointsWomenFirst + changePointsWomenSecond;
+
+            changePointsMenFirst > changePointsMenSecond ? compareBlock.querySelector("#eduMenOne").classList.add("blueBoldText")
+                                                         : compareBlock.querySelector("#eduMenTwo").classList.add("blueBoldText");
+            changePointsWomenFirst > changePointsWomenSecond ? compareBlock.querySelector("#eduWomenOne").classList.add("redBoldText")
+                                                             : compareBlock.querySelector("#eduWomenTwo").classList.add("redBoldText");
+            changePointsDistrictOne > changePointsDistrictTwo ? compareBlock.querySelector("#districtOne").classList.add("greenBoldText")
+                                                              : compareBlock.querySelector("#districtTwo").classList.add("greenBoldText");
+        }
+    }
 }

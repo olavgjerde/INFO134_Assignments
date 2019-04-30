@@ -64,14 +64,15 @@
             <p>Skriv inn kommunenummer</p>
             <input id="detailsNumInput" type="text">
             <button id="detailsSubmit">Finn Kommune</button>
+            <span id="detailsError" class="errorMessage"></span>
 
             <h2>Søke resultat</h2>
             <ul id="detailsList">
-                <li id="dName">Navn</li>
-                <li id="dNum">Nummer</li>
-                <li id="dPopulation">Populasjonstall</li>
-                <li id="dEmploy">Sysselsettingstall</li>
-                <li id="dEducate">Utdanningstall</li>
+                <li>Navn: <span id="dName"></span></li>
+                <li>Nummer: <span id="dNum"></span></li>
+                <li>Populasjonstall: <span id="dPopulation"></span></li>
+                <li>Sysselsettingstall: <span id="dEmploy"></span></li>
+                <li>Utdanningstall: <span id="dEducate"></span></li>
             </ul>
 
             <h2>Historikk</h2>
@@ -102,15 +103,34 @@
 
         <section id="comparison">
             <h1>Sammenlikning</h1>
-            <p>
-                Bacon ipsum dolor amet pork loin bacon beef ribs flank cupim pastrami porchetta,
-                frankfurter chuck t-bone shoulder ham hock swine capicola.
-                T-bone pig flank tri-tip salami, kevin ground round andouille short
-                loin cow turkey alcatra landjaeger tenderloin.
-                Chicken pig pancetta, pork loin meatloaf shank pork chop spare ribs.
-                Shank jerky venison t-bone. Landjaeger chuck drumstick shank,
-                chicken turkey t-bone tail bacon shoulder cupim porchetta.
-            </p>
+            <p>Skriv inn et kommunenummer i hver</p>
+            <input id="compareNumInputOne" type="text">
+            <input id="compareNumInputTwo" type="text">
+            <button id="compareSubmit">Sammenlign Kommuner</button>
+            <span id="compareError" class="errorMessage"></span>
+
+            <p class="redBoldText">* Rød markering betyr høyest økning / minst reduksjon for begge kommunene i sysselsetting av kvinner</p>
+            <p class="blueBoldText">* Blå markering betyr høyest økning / minst reduksjon for begge kommunene i sysselsetting av menn</p>
+            <p class="greenBoldText">* Grønn markering betyr høyest økning / minst reduksjon for begge kommunene i total sysselsetting</p>
+
+            <h2>Historikk</h2>
+            <div id="compareHistory">
+                <div class="historyElement">
+                    <h3 id="compareYear">ÅR</h3>
+                    <label>Sysselsetting i <span id="districtOne">Kommune 1</span>
+                        <ul>
+                            <li>Menn: <span id="eduMenOne">--- </span>%</li>
+                            <li>Kvinner: <span id="eduWomenOne">--- </span>%</li>
+                        </ul>
+                    </label>
+                    <label>Sysselsetting i <span id="districtTwo">Kommune 2</span>
+                        <ul>
+                            <li>Menn: <span id="eduMenTwo">--- </span>%</li>
+                            <li>Kvinner: <span id="eduWomenTwo">--- </span>%</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
         </section>
     </div>
 
