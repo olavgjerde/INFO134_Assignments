@@ -70,6 +70,10 @@ EduDataset.prototype = {
     onload: null
 }
 
+/**
+ *  Maps the statistical notation for education-level to a more readable notation,
+ *  to be used as keys for the dataset-objects.
+ */ 
 const educationMapper = {
     "01": "primarySchool",
     "02a": "highSchool",

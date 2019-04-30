@@ -29,7 +29,7 @@
             <h1>Velkommen</h1>
             <p>
                 Dette er et verktøy for å vise data om Norges befolkning. Under oversikt finner du alle kommunene med navn, kommunenummer, og siste måling av total befolkning. 
-                Under Detaljer så kan du finne kommunens navn, kommunenummer, siste målte befolkning, siste målte statistikk for sysselseting
+                Under Detaljer så kan du finne kommunens navn, kommunenummer, siste målte befolkning, siste målte statistikk for sysselsetting
                 og høyere utdanning hvis du skriver inn kommunenummer. Kan også få se historisk utvikling. Under sammenligning så kan du 
                 vise og sammenligne historisk data for utvikling av sysselsetting for kjønnskategoriene “Menn” og “Kvinner” i begge kommunene. 
             </p>
@@ -67,14 +67,37 @@
 
             <h2>Søke resultat</h2>
             <ul id="detailsList">
-                <li id="dName"></li>
-                <li id="dNum"></li>
-                <li id="dPopulation"></li>
-                <li id="dEmploy"></li>
-                <li id="dEducate"></li>
+                <li id="dName">Navn</li>
+                <li id="dNum">Nummer</li>
+                <li id="dPopulation">Populasjonstall</li>
+                <li id="dEmploy">Sysselsettingstall</li>
+                <li id="dEducate">Utdanningstall</li>
             </ul>
 
             <h2>Historikk</h2>
+            <div id="detailsHistory">
+                <div class="historyElement">
+                    <h3 id="histYear">ÅR</h3>
+                    <label>Populasjon
+                        <ul>
+                            <li>Menn: <span id="popMen">--- </span></li>
+                            <li>Kvinner: <span id="popWomen">--- </span></li>
+                        </ul>
+                    </label>
+                    <label>Sysselsetting
+                        <ul>
+                            <li>Menn: <span id="empMen">--- </span>%</li>
+                            <li>Kvinner: <span id="empWomen">--- </span>%</li>
+                        </ul>
+                    </label>
+                    <label>Utdanning
+                        <ul>
+                            <li>Menn: <span id="eduMen">--- </span>%</li>
+                            <li>Kvinner: <span id="eduWomen">--- </span>%</li>
+                        </ul>
+                    </label>
+                </div>
+            </div>
         </section>
 
         <section id="comparison">

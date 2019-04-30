@@ -1,11 +1,4 @@
-/*
-Theme colors:
-#A4BFBA
-#6E807C
-#DBFFF8
-#37403E
-#C8E8E2
-*/
+/* Theme colors: #A4BFBA #6E807C #DBFFF8 #37403E #C8E8E2 */
 
 body, html {
     height: 100%;
@@ -47,7 +40,13 @@ body, html {
     background-color: inherit;
 }
 
-#ssbButtons button{
+#banner button:hover {
+    transition: 0.75s;
+    color: #37403E;
+    background-color: #C8E8E2;
+}
+
+#ssbButtons button {
     background-color: #37403E; /* Green */
     border: none;
     color:#DBFFF8;
@@ -62,13 +61,7 @@ body, html {
 
 }
 
-#ssbButtons button:hover{
-    transition: 0.75s;
-    color: #37403E;
-    background-color: #C8E8E2;
-}
-
-#banner button:hover {
+#ssbButtons button:hover {
     transition: 0.75s;
     color: #37403E;
     background-color: #C8E8E2;
@@ -80,6 +73,36 @@ body, html {
     padding: 2em;
     color: #37403E;
     background-color: #DBFFF8;
+}
+
+table, td {
+    margin: 0 auto;
+    border: 1px solid #333;
+    padding: 1.5em;
+}
+
+thead, tfoot {
+    background-color: #37403E;
+    color: #DBFFF8;
+}
+
+#detailsHistory {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#detailsHistory .historyElement {
+    padding: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    border-radius: 0.5em;
+    box-shadow: 0 8px 10px 0 black;
+    color: #DBFFF8;
+    background-color: #37403E;
+}
+
+#detailsHistory .historyElement h3 {
+    margin-top: 0;
 }
 
 footer {
@@ -94,16 +117,4 @@ footer {
 
 .hiddenSection {
     display: none;
-}
-
-
-table,
-td {
-    border: 1px solid #333;
-}
-
-thead,
-tfoot {
-    background-color: #333;
-    color: #fff;
 }
