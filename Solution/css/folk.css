@@ -78,12 +78,13 @@ body, html {
     background-color: #DBFFF8;
 }
 
-table, td {
+#overview table, td {
     margin: 0 auto;
-    border: 1px solid #333;
+    padding: 0.5em;
+    border-bottom: 2px solid #333;
 }
 
-thead, tfoot {
+#overview thead, tfoot {
     background-color: #37403E;
     color: #DBFFF8;
 }
