@@ -70,37 +70,60 @@
             <button id="detailsSubmit">Finn Kommune</button>
             <span id="detailsError" class="errorMessage"></span>
 
-            <h2>Søke resultat</h2>
+            <h2>Søkeresultat</h2>
             <ul id="detailsList">
                 <li>Navn: <span id="dName"></span></li>
                 <li>Nummer: <span id="dNum"></span></li>
                 <li>(2018) Populasjonstall: <span id="dPopulation"></span></li>
                 <li>(2018) Sysselsettingstall: <span id="dEmploy"></span></li>
-                <li>(2017) Utdanningstall: <span id="dEducate"></span></li>
+                <li>(2017) Utdanningstall for høyere utdanning: <span id="dEducate"></span></li>
             </ul>
 
             <h2>Historikk</h2>
             <div id="detailsHistory">
                 <div class="historyElement">
                     <h3 id="histYear">ÅR</h3>
-                    <label>Populasjon
-                        <ul>
-                            <li>Menn: <span id="popMen">--- </span></li>
-                            <li>Kvinner: <span id="popWomen">--- </span></li>
-                        </ul>
-                    </label>
-                    <label>Sysselsetting
-                        <ul>
-                            <li>Menn: <span id="empMen">--- </span>%</li>
-                            <li>Kvinner: <span id="empWomen">--- </span>%</li>
-                        </ul>
-                    </label>
-                    <label>Utdanning
-                        <ul>
-                            <li>Menn: <span id="eduMen">--- </span>%</li>
-                            <li>Kvinner: <span id="eduWomen">--- </span>%</li>
-                        </ul>
-                    </label>
+                    <label>Populasjon</label>
+                    <ul>
+                        <li>Menn: <span id="popMen">--- </span></li>
+                        <li>Kvinner: <span id="popWomen">--- </span></li>
+                    </ul>
+                    <label>Sysselsetting</label>
+                    <ul>
+                        <li>Menn: <span id="empMen">--- </span>%</li>
+                        <li>Kvinner: <span id="empWomen">--- </span>%</li>
+                    </ul>
+                    <label>Utdanning</label>
+                    <p>Grunnskole</p>
+                    <ul>
+                        <li>Menn: <span id="primarySchoolMen">--- </span>%</li>
+                        <li>Kvinner: <span id="primarySchoolWomen">--- </span>%</li>
+                    </ul>
+                    <p>Videregående</p>
+                    <ul>
+                        <li>Menn: <span id="highSchoolMen">--- </span>%</li>
+                        <li>Kvinner: <span id="highSchoolWomen">--- </span>%</li>
+                    </ul>
+                    <p>Høyere utdanning (kort)</p>
+                    <ul>
+                        <li>Menn: <span id="higherShortMen">--- </span>%</li>
+                        <li>Kvinner: <span id="higherShortWomen">--- </span>%</li>
+                    </ul>
+                    <p>Høyere utdanning (lang)</p>
+                    <ul>
+                        <li>Menn: <span id="higherLongMen">--- </span>%</li>
+                        <li>Kvinner: <span id="higherLongWomen">--- </span>%</li>
+                    </ul>
+                    <p>Uoppgitt</p>
+                    <ul>
+                        <li>Menn: <span id="undefinedEduMen">--- </span>%</li>
+                        <li>Kvinner: <span id="undefinedEduWomen">--- </span>%</li>
+                    </ul>
+                    <p>Fagskole</p>
+                    <ul>
+                        <li>Menn: <span id="vocationalMen">--- </span>%</li>
+                        <li>Kvinner: <span id="vocationalWomen">--- </span>%</li>
+                    </ul>
                 </div>
             </div>
         </section>
@@ -122,18 +145,16 @@
             <div id="compareHistory">
                 <div class="historyElement">
                     <h3 id="compareYear">ÅR</h3>
-                    <label>Sysselsetting i <span id="districtOne">Kommune 1</span>
-                        <ul>
-                            <li>Menn: <span id="empMenOne">--- </span>%</li>
-                            <li>Kvinner: <span id="empWomenOne">--- </span>%</li>
-                        </ul>
-                    </label>
-                    <label>Sysselsetting i <span id="districtTwo">Kommune 2</span>
-                        <ul>
-                            <li>Menn: <span id="empMenTwo">--- </span>%</li>
-                            <li>Kvinner: <span id="empWomenTwo">--- </span>%</li>
-                        </ul>
-                    </label>
+                    <label>Sysselsetting i <span id="districtOne">Kommune 1</span></label>
+                    <ul>
+                        <li>Menn: <span id="empMenOne">--- </span>%</li>
+                        <li>Kvinner: <span id="empWomenOne">--- </span>%</li>
+                    </ul>
+                    <label>Sysselsetting i <span id="districtTwo">Kommune 2</span></label>
+                    <ul>
+                        <li>Menn: <span id="empMenTwo">--- </span>%</li>
+                        <li>Kvinner: <span id="empWomenTwo">--- </span>%</li>
+                    </ul>
                 </div>
             </div>
         </section>

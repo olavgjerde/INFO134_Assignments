@@ -45,13 +45,12 @@ EduDataset.prototype = {
             this.nameList.push(districtName);
             this.idList.push(districtId);
 
-            let containerObject = {}
-            containerObject["name"] = districtName;
-
+            let educationInfo = {}
             for (let innerKey in rootElement[districtName]) {
                 if (innerKey == "kommunenummer") continue;
-                let eduType = educationMapper[innerKey];
-                containerObject[eduType] = {
+                let educationLevel = educationMapper[innerKey];
+                // Creates an object to represent education-level
+                educationInfo[educationLevel] = {
                     "men": rootElement[districtName][innerKey]["Menn"],
                     "women": rootElement[districtName][innerKey]["Kvinner"],
                     "menForYear": function(year) { return this.men[year] },
@@ -59,7 +58,7 @@ EduDataset.prototype = {
                 }
             }
             
-            this.datasetDict[districtId] = containerObject;
+            this.datasetDict[districtId] = educationInfo;
         }
         if (this.onload) this.onload();
     },

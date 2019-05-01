@@ -196,11 +196,6 @@ function populateDetailsHistory(disPopulationData, disEmploymentData, disEducati
         let empCountMen = Math.floor((populationMen / 100) * empPercentMen);
         let empCountWomen = Math.floor((populationWomen / 100) * empPercentWomen);
 
-        let eduPercentMen = disEducationData.higherShort.menForYear(year);
-        let eduPercentWomen = disEducationData.higherShort.womenForYear(year);
-        let eduCountMen = Math.floor((populationMen / 100) * eduPercentMen);
-        let eduCountWomen = Math.floor((populationWomen / 100) * eduPercentWomen);
-
         // Creates a new "history-block" from a "template" fetched from the DOM
         // Feeds data to the elements within this block
         let detailBlock = detailElementTemplate.cloneNode(true);
@@ -209,10 +204,31 @@ function populateDetailsHistory(disPopulationData, disEmploymentData, disEducati
         detailBlock.querySelector("#popWomen").innerText = populationWomen;
         detailBlock.querySelector("#empMen").innerText = empCountMen + " / " + empPercentMen;
         detailBlock.querySelector("#empWomen").innerText = empCountWomen + " / " + empPercentWomen;
-        detailBlock.querySelector("#eduMen").innerText = eduCountMen + " / " + eduPercentMen;
-        detailBlock.querySelector("#eduWomen").innerText = eduCountWomen + " / " + eduPercentWomen;
+
+        for (let educationLevel in disEducationData) {
+            let statistics = calculateEducationNumbers(year, populationMen, populationWomen, disEducationData[educationLevel]);
+            detailBlock.querySelector("#" + educationLevel + "Men").innerText = statistics.countMen + " / " + statistics.percentMen;
+            detailBlock.querySelector("#" + educationLevel + "Women").innerText = statistics.countMen + " / " + statistics.percentMen;
+        }
+
         detailHistoryContainer.appendChild(detailBlock);
     }
+}
+
+/**
+ * Find and calculates statistical data for a given educationLevel-object
+ * (see object creation in EduDatasets's parseContent()-method)
+ * @param year what year to fetch information for
+ * @param populationMen population of the given year for men
+ * @param populationWomen population of the given year for women
+ * @param eduInfo the educationLevel-object to look up information in
+ */
+function calculateEducationNumbers(year, populationMen, populationWomen, eduInfo) {
+    let percentMen = eduInfo.menForYear(year);
+    let percentWomen = eduInfo.womenForYear(year);
+    let countMen = Math.floor((populationMen / 100) * percentMen);
+    let countWomen = Math.floor((populationWomen / 100) * percentWomen);
+    return {"percentMen": percentMen, "percentWomen": percentWomen, "countMen": countMen, "countWomen": countWomen};
 }
 
 /**
