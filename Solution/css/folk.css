@@ -8,34 +8,36 @@ body, html {
 }
 
 #banner {
-    display: flex;
-    align-items: center;
-    height: 4rem;
     margin: 0 0 1em 0;
     color: #DBFFF8;
     background-color: #37403E;
 }
 
-#banner span {
-    padding: 1em;
-    margin-right: auto;
+#banner div {
+    display: flex;
+    justify-content: center;
     font-size: 25px;
     font-weight: bold;
 }
 
 #banner nav {
     display: flex;
-    flex-grow: 1;
-    height: 100%;
+    flex-wrap: wrap;
+}
+
+@media (max-width: 600px) {
+    #banner nav {
+        flex-direction: column;
+    }
 }
 
 #banner button {
+    flex-grow: 1;
+    padding: 0.5em 0 0.5em 0;
     font-size: 1.5em;
     font-family: inherit;
-    border: 0;
-    padding: 0;
     font-weight: bold;
-    flex-grow: 2;
+    border: 0;
     color: inherit;
     background-color: inherit;
 }
@@ -69,6 +71,7 @@ body, html {
     display: block;
     box-shadow: 0 0 2px black;
     padding: 2em;
+    margin-bottom: 2em;
     color: #37403E;
     background-color: #DBFFF8;
 }
@@ -76,7 +79,6 @@ body, html {
 table, td {
     margin: 0 auto;
     border: 1px solid #333;
-    padding: 1.5em;
 }
 
 thead, tfoot {
