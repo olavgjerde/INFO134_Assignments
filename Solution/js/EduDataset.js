@@ -1,3 +1,8 @@
+/**
+ * An EduDataset object is meant to function as an interface against:
+ *  - The education dataset (http://wildboy.uib.no/~tpe056/folk/85432.json)
+ * @param contentUrl the url of the resource that this object should fetch
+ */
 function EduDataset(contentUrl) {
     this.contentUrl = contentUrl;
     this.nameList = [];
@@ -6,18 +11,29 @@ function EduDataset(contentUrl) {
 }
 
 EduDataset.prototype = {
+    /**
+     * Returns a list of all the district names contained within the dataset.
+     */
     getNames: function () {
         return this.nameList;
     },
-    getIDs: function () {
+    /**
+     * Returns a list of all the district-ids contained within the dataset.
+     */
+    getIds: function () {
         return this.idList;
     },
+    /**
+     * Returns an object with information about the district belonging
+     * to the id given as a parameter.
+     * @param districtId id of the district to fetch information about
+     */
     getInfo: function (districtId) {
         return this.datasetDict[districtId];
     },
     /**
      * Parses a response-object from the load-function into an object
-     * where the municipality-codes are the keys and the values for every key are:
+     * where the municipality-codes are the keys and the values for the various keys are:
      * name of municipality and statistics for men & women sorted into education category.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
@@ -40,9 +56,6 @@ EduDataset.prototype = {
                     "women": rootElement[districtName][innerKey]["Kvinner"],
                     "menForYear": function(year) { return this.men[year] },
                     "womenForYear": function(year) { return this.women[year] },
-                    // These functions assume correct order within json (asc. by year)
-                    "menLatest": function () { return this.men[Object.keys(this.men)[Object.keys(this.men).length - 1]]},
-                    "womenLatest": function() { return this.women[Object.keys(this.women)[Object.keys(this.women).length - 1]]},
                 }
             }
             
@@ -55,18 +68,19 @@ EduDataset.prototype = {
      * the objects initialization.
      */
     load: function () {
-        // TODO: 1. disable navigation | 2. set loading message
         let proto = this;
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (request.readyState == 4 && request.status == 200) {
-                let responseObject = JSON.parse(request.responseText);
-                proto.parseContent(responseObject);
+                proto.parseContent(JSON.parse(request.responseText));
             }
         }
         request.open("GET", this.contentUrl);
         request.send();
     },
+    /**
+     * onload() is set to null as default until set to a function by the user
+     */
     onload: null
 }
 

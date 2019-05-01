@@ -1,23 +1,40 @@
-function SharedDataset(contentUrl) {
+/**
+ * A CommonDataset object is meant to function as an interface against:
+ *  - The population dataset (http://wildboy.uib.no/~tpe056/folk/104857.json)
+ *  - The employment dataset (http://wildboy.uib.no/~tpe056/folk/100145.json)
+ * @param contentUrl the url of the resource that this object should fetch
+ */
+function CommonDataset(contentUrl) {
     this.contentUrl = contentUrl;
     this.nameList = [];
     this.idList = [];
     this.datasetDict = {};
 }
 
-SharedDataset.prototype = {
+CommonDataset.prototype = {
+    /**
+     * Returns a list of all the district names contained within the dataset.
+     */
     getNames: function () {
         return this.nameList;
     },
-    getIDs: function () {
+    /**
+     * Returns a list of all the district-ids contained within the dataset.
+     */
+    getIds: function () {
         return this.idList;
     },
+    /**
+     * Returns an object with information about the district belonging
+     * to the id given as a parameter.
+     * @param districtId id of the district to fetch information about
+     */
     getInfo: function (districtId) {
         return this.datasetDict[districtId];
     },
     /**
      * Parses a response-object from the load-function into an object
-     * where the municipality-codes are the keys and the values for every key are:
+     * where the municipality-codes are the keys and the values for the various keys are:
      * name of municipality, statistics for men, and statistics for women.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
@@ -29,7 +46,6 @@ SharedDataset.prototype = {
             this.nameList.push(districtName);
             this.idList.push(districtId);
 
-            // section not dependant on dataset-type
             this.datasetDict[districtId] = {
                  "name": districtName,
 		         "men": rootElement[districtName]["Menn"],
@@ -50,17 +66,18 @@ SharedDataset.prototype = {
      * the objects initialization.
      */
     load: function () {
-        // TODO: 1. disable navigation | 2. set loading message
         let proto = this;
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
             if (request.readyState == 4 && request.status == 200) {
-                let responseObject = JSON.parse(request.responseText);
-                proto.parseContent(responseObject);
+                proto.parseContent(JSON.parse(request.responseText));
             }
         }
         request.open("GET", this.contentUrl);
         request.send();
     },
+    /**
+     * onload() is set to null as default until set to a function by the user
+     */
     onload: null
 }

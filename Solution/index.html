@@ -6,7 +6,7 @@
     <title>Folk</title>
     <link rel="stylesheet" type="text/css" href="css/folk.css">
     <script defer src="js/folk.js" charset="utf-8"></script>
-    <script defer src="js/SharedDataset.js" charset="utf-8"></script>
+    <script defer src="js/CommonDataset.js" charset="utf-8"></script>
     <script defer src="js/EduDataset.js" charset="utf-8"></script>
 </head>
 
@@ -25,6 +25,8 @@
 
     <!-- Main content -->
     <div id="contentContainer">
+
+        <!-- INTRODUCTION-VIEW OF APPLICATION BELOW -->
         <section id="introduction">
             <h1>Velkommen</h1>
             <p>
@@ -44,6 +46,7 @@
             </div>
         </section>
 
+        <!-- OVERVIEW-VIEW OF APPLICATION BELOW -->
         <section id="overview">
             <h1>Oversikt</h1>
             <table>
@@ -59,6 +62,7 @@
             </table>
         </section>
 
+        <!-- DETAILS-VIEW OF APPLICATION BELOW -->
         <section id="details">
             <h1>Detaljer</h1>
             <p>Skriv inn kommunenummer</p>
@@ -70,9 +74,9 @@
             <ul id="detailsList">
                 <li>Navn: <span id="dName"></span></li>
                 <li>Nummer: <span id="dNum"></span></li>
-                <li>Populasjonstall: <span id="dPopulation"></span></li>
-                <li>Sysselsettingstall: <span id="dEmploy"></span></li>
-                <li>Utdanningstall: <span id="dEducate"></span></li>
+                <li>(2018) Populasjonstall: <span id="dPopulation"></span></li>
+                <li>(2018) Sysselsettingstall: <span id="dEmploy"></span></li>
+                <li>(2017) Utdanningstall: <span id="dEducate"></span></li>
             </ul>
 
             <h2>Historikk</h2>
@@ -101,6 +105,7 @@
             </div>
         </section>
 
+        <!-- COMPARISON-VIEW OF APPLICATION BELOW -->
         <section id="comparison">
             <h1>Sammenlikning</h1>
             <p>Skriv inn et kommunenummer i hver</p>
@@ -119,14 +124,14 @@
                     <h3 id="compareYear">ÅR</h3>
                     <label>Sysselsetting i <span id="districtOne">Kommune 1</span>
                         <ul>
-                            <li>Menn: <span id="eduMenOne">--- </span>%</li>
-                            <li>Kvinner: <span id="eduWomenOne">--- </span>%</li>
+                            <li>Menn: <span id="empMenOne">--- </span>%</li>
+                            <li>Kvinner: <span id="empWomenOne">--- </span>%</li>
                         </ul>
                     </label>
                     <label>Sysselsetting i <span id="districtTwo">Kommune 2</span>
                         <ul>
-                            <li>Menn: <span id="eduMenTwo">--- </span>%</li>
-                            <li>Kvinner: <span id="eduWomenTwo">--- </span>%</li>
+                            <li>Menn: <span id="empMenTwo">--- </span>%</li>
+                            <li>Kvinner: <span id="empWomenTwo">--- </span>%</li>
                         </ul>
                     </label>
                 </div>
@@ -136,7 +141,7 @@
 
     <!-- Footer with project info -->
     <footer>
-        <p>INFO134 Semester Assignment: Folk</p>
+        <p>INFO134 Semester Oppgave: Folk</p>
     </footer>
 </body>
 

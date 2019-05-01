@@ -1,14 +1,64 @@
-1. Lastes datasettene ned samtidig eller etter hverandre av deres program? Begrunn svaret ditt. Henvis
-gjerne til koden og forklar når de tre forespørslene blir sendt. (Du trenger ikke å rettferdiggjøre hvorfor
-deres program laster inn dataene på denne måten.)
+Filbeskrivelser
 
-2. Hvordan vet programmet deres når det tredje (siste) datasettet er lastet ned. Begrunn svaret deres. (Henvis
-gjerne til en variabel, eller et sted i koden der dette er sikkert.)
+    index.html : Den eneste html filen i innleveringen som inneholder all 
+                 markup for applikasjonen, utenom det som blir generert av javascript.
+
+    folk.css : All stil-informasjon for applikasjonen.
+
+    folks.js : Inneholder hovedlogikk for hvordan data skal presenteres for det forskjellige
+               seksjonene som; oversikt, detaljer osv.
+
+    CommonDataset.js : Inneholder kontruktør for fellesdataset-objekt, fungerer som grensesnitt for
+                       populasjons- og sysselsettings-dataene.
+
+    EduDataset.js : Inneholder kontruktør for utdanningdataset-objekt, fungere som grensesnitt for
+                    utdanningsdataene.
+
+1. Lastes datasettene ned samtidig eller etter hverandre av deres program? Begrunn svaret ditt. 
+   Henvis gjerne til koden og forklar når de tre forespørslene blir sendt. 
+   (Du trenger ikke å rettferdiggjøre hvorfor deres program laster inn dataene på denne måten.)
+
+        Svar: Datasettene blir lastet ned etter hverandre i vårt program. Om man ser i init() funksjonen som
+              er definert i folks.js så vil man få øye på at onclick() funksjoner blir definert for alle 
+              navigasjonsknappene. For oversikt, detaljer og sammenligning vil onclick() laste datasettene som er
+              nødvendige for den gitten seksjonen av programmet, den skjekker dette ved å teste om de globale
+              variablene populationData, employmentData, educationData er definert.
+
+              Merk at oversiktsknapp laster kun populasjonsdata, sammenligningsknapp laster kun sysselsettingsdata
+              og detaljerknapp laster alle 3 datasettene. Om en gitt seksjonene har lastet data nødvendig for en annen
+              seksjon så vil ikkje dataene bli lastet ned på nytt.
+
+2. Hvordan vet programmet deres når det tredje (siste) datasettet er lastet ned. Begrunn svaret deres. 
+   (Henvis gjerne til en variabel, eller et sted i koden der dette er sikkert.)
+
+        Svar: Navigasjonsknappene setter i gang lasting av de ulike datasettene (se bruk av fetchPopulationData() o.l funksjoner i init() i folk.js),
+              på søkeknappene er onclick() definert slik at den sjekker om de nødvendige datasettene er definert. Skulle de ikke være definert
+              når brukeren trykker på knappene vil ikke funksjoner som er avhengig av disse bli kjørt.
+
+              Vi kan være sikker på at alle datasettene er lastet når handleDetailsSearch() blir kallet på,
+              siden dette er eneste funksjonen avhengig av alle 3 datasettene.
+              Se gjerne: "document.getElementById("detailsSubmit").onclick = ...." i init() i folk.js
 
 3. På små skjermer skal de historiske dataene presenteres vertikalt. På store skjermer skal de presenteres
-horisontalt. Forklar hvordan dere har løst dette. (Henvis gjerne til CSS-koden deres.)
+   horisontalt. Forklar hvordan dere har løst dette. (Henvis gjerne til CSS-koden deres.)
 
-4. Har alle tre datasett nøyaktig de samme kommunene? Forklar kort hvordan dere fant dette svaret. Dere
-trenger ikke å legge ved ekstra kode hvis dere har skrevet kode for å svare på dette spørsmålet, men bare
-forklare fremgangsmåten deres.
+        Svar: Vi har laget "div"-er med klassen "historyElement" som vi har lagt inn i "div"-er som enten har id
+              "detailsHistory" eller "compareHistory". Disse 2 "foreldre"-elementene er satt i CSS til å være flexbox-er med
+              en flex-wrap satt til "wrap". Dette gjør at elementene sprer seg ut horisontalt så langt det går når skjermen vokser,
+              men skyver "historyElement"-ene våre under hverandre til et vertikalt perspektiv når skjermen krymper.
+
+              Se hovedsakling #detailsHistory, #compareHistory og .historyElement i folk.css.
+
+4. Har alle tre datasett nøyaktig de samme kommunene? Forklar kort hvordan dere fant dette svaret. 
+   Dere trenger ikke å legge ved ekstra kode hvis dere har skrevet kode for å svare på dette spørsmålet, 
+   men bare forklare fremgangsmåten deres.
+
+        Svar: Alle datasettene har ikke nøyaktig de samme kommunene, dette kan man f.eks skjekke på
+              variablene vi selv initialiserer i "detaljer"-seksjonen. 
+              Om du i konsollen her skriver: "populationData.getIds().length == employmentData.getIds().length == educationData.getIds().length;"
+              Så vil dette returnere "false", og de er dermed ulike - siden getIds() innehold alle kommune nummer for de ulike settene.
+
+              Håndteringen for dette skjer i handleDetailsSearch() og handleComparisonSearch() i folk.js,
+              om getInfo(enGittId) på datasettene ikke finner data for en kommune så vil retur verdien bli undefined.
+              I de 2 metodene vil du finne kode som viser brukeren et error om ugyldig id om dette er tilfelle.
   

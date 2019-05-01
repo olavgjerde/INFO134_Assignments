@@ -7,7 +7,7 @@ let sectionList = [introSection, overviewSection, detailsSection, comparisonSect
 let populationData, employmentData, educationData;
 let overviewPopulated = false;
 
-// Fetch DOM element to use as a template for history-elements, for details and comparison section
+// Fetch DOM element to use as a template for history-elements in the details and comparison views
 let detailHistoryContainer = document.getElementById("detailsHistory");
 let compareHistoryContainer = document.getElementById("compareHistory");
 let detailElementTemplate = detailHistoryContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
@@ -38,26 +38,46 @@ function init() {
         if (!employmentData) fetchEmploymentData();
     }
 
-    document.getElementById("detailsSubmit").onclick = populateDetails;
-    document.getElementById("compareSubmit").onclick = populateComparison;
+    // Both events check that the required data has loaded before trying to execute
+    document.getElementById("detailsSubmit").onclick = function() {
+        if (populationData && employmentData && educationData) handleDetailsSearch();
+    }
+    document.getElementById("compareSubmit").onclick = function() {
+        if (employmentData) handleComparisonSearch();
+    }
 
     overviewSection.classList.toggle("hiddenSection");
     detailsSection.classList.toggle("hiddenSection");
     comparisonSection.classList.toggle("hiddenSection");
 }
 
+/**
+ * Creates a new CommonDataset with the url-resource belonging to the population-data,
+ * then sets the onload-function and finally calls load() on the new object.
+ * @param onloadFunction function to be set as the onload-function for the new Dataset-object
+ */
 function fetchPopulationData(onloadFunction) {
-    populationData = new SharedDataset("http://wildboy.uib.no/~tpe056/folk/104857.json");
+    populationData = new CommonDataset("http://wildboy.uib.no/~tpe056/folk/104857.json");
     populationData.onload = onloadFunction;
     populationData.load();
 }
 
+/**
+ * Creates a new CommonDataset with the url-resource belonging to the employment-data,
+ * then sets the onload-function and finally calls load() on the new object.
+ * @param onloadFunction function to be set as the onload-function for the new Dataset-object
+ */
 function fetchEmploymentData(onloadFunction) {
-    employmentData = new SharedDataset("http://wildboy.uib.no/~tpe056/folk/100145.json");
+    employmentData = new CommonDataset("http://wildboy.uib.no/~tpe056/folk/100145.json");
     employmentData.onload = onloadFunction;
     employmentData.load();
 }
 
+/**
+ * Creates a new EduDataset with the url-resource belonging to the education-data,
+ * then sets the onload-function and finally calls load() on the new object.
+ * @param onloadFunction function to be set as the onload-function for the new Dataset-object
+ */
 function fetchEducationData(onloadFunction) {
     educationData = new EduDataset("http://wildboy.uib.no/~tpe056/folk/85432.json");
     educationData.onload = onloadFunction;
@@ -65,53 +85,56 @@ function fetchEducationData(onloadFunction) {
 }
 
 /**
- * Shows a given section and hides all the other ones defined in "sectionList"
+ * Shows a given section and hides all the other ones defined in the global "sectionList"-variable.
  * @param targetSection section-element which should become visible
  */
 function toggleSectionVisibility(targetSection) {
     targetSection.classList.remove("hiddenSection");
-    for (let id in sectionList) {
-        let sectionInList = sectionList[id];
-        if (sectionInList !== targetSection) {
-            sectionInList.classList.add("hiddenSection");
-        }
-    }
+    sectionList.forEach(section => {
+        if (section !== targetSection) section.classList.add("hiddenSection");
+    });
 }
 
 /**
- * Populates the overview section of the application with data
- * from the dataset object defined on the "populationData" variable
+ * Populates the overview-view of the application with data
+ * from the dataset object defined on the "populationData" variable.
  */
 function populateOverview() {
     let overviewTbody = document.getElementById("overviewBody");
-    let municipalityIds = populationData.getIDs();
+    let districtIds = populationData.getIds();
 
-    for (let index in municipalityIds) {
+    // Fetches data from all the district-ids available and populates a table with this information
+    districtIds.forEach(districtId => {
         let idElement = document.createElement("td");
         let nameElement = document.createElement("td");
         let populationElement = document.createElement("td");
 
-        let info = populationData.getInfo(municipalityIds[index]);
+        let info = populationData.getInfo(districtId);
         nameElement.innerText = info.name;
+        idElement.innerText = districtId;
         populationElement.innerText = info.menLatest() + info.womenLatest();
-        idElement.innerText = municipalityIds[index];
 
         let tableRow = document.createElement("tr");
         tableRow.appendChild(nameElement);
         tableRow.appendChild(idElement);
         tableRow.appendChild(populationElement);
         overviewTbody.appendChild(tableRow);
-    }
+    });
     overviewPopulated = true;
 }
 
-function populateDetails() {
-    let disctrictId = document.getElementById("detailsNumInput").value;
-    let disPopulationData = populationData.getInfo(disctrictId);
-    let disEmploymentData = employmentData.getInfo(disctrictId);
-    let disEducationData = educationData.getInfo(disctrictId);
+/**
+ * Handles the search in the details-view of the application and makes the appropriate calls
+ * to populate the view with data from the dataset objects defined on the
+ * populationData, employmentData and educationData variables.
+ */
+function handleDetailsSearch() {
+    let districtId = document.getElementById("detailsNumInput").value;
+    let disPopulationData = populationData.getInfo(districtId);
+    let disEmploymentData = employmentData.getInfo(districtId);
+    let disEducationData = educationData.getInfo(districtId);
 
-    // Error-handling for districtId inputs
+    // Error-handling if one of the data-lookups end up as undefined
     if (!disPopulationData || !disEmploymentData || !disEducationData) {
         document.getElementById("detailsError").innerText = "Kommune-nummer ikke gyldig";
         return;
@@ -119,29 +142,48 @@ function populateDetails() {
         document.getElementById("detailsError").innerText = "";
     }
 
-    // LATEST DETAILS SECTION
+    // Populate the two sections contained within the details-view with data from the search
+    populateRecentDetails(disPopulationData, disEmploymentData, disEducationData, districtId);
+    populateDetailsHistory(disPopulationData, disEmploymentData, disEducationData);
+}
+
+/**
+ * Populates the recent details section of the details-view after a search takes place
+ * @param disPopulationData population-data belonging to the given districtId
+ * @param disEmploymentData employment-data belonging to the given districtId
+ * @param disEducationData education-data belonging to the given districtId
+ * @param districtId id belonging to the target district of the search
+ */
+function populateRecentDetails(disPopulationData, disEmploymentData, disEducationData, districtId) {
     document.getElementById("dName").innerText = disPopulationData.name;
-    document.getElementById("dNum").innerText = disctrictId;
-    document.getElementById("dPopulation").innerText = "(2018) " + (disPopulationData.menLatest() + disPopulationData.womenLatest());
+    document.getElementById("dNum").innerText = districtId;
+    document.getElementById("dPopulation").innerText = (disPopulationData.menLatest() + disPopulationData.womenLatest());
 
     // Calculate employment numbers
     let empPercentMen = disEmploymentData.menLatest();
     let empPercentWomen = disEmploymentData.womenLatest();
     let menEmpCount = Math.floor((disPopulationData.menLatest() / 100) * empPercentMen);
     let womenEmpCount = Math.floor((disPopulationData.womenLatest() / 100) * empPercentWomen);
-    document.getElementById("dEmploy").innerText = "(2018) Menn: " + menEmpCount + " / " + empPercentMen + "%\n" 
-                                                 + "(2018) Kvinner: " + womenEmpCount + " / " + empPercentWomen + "%";
+    document.getElementById("dEmploy").innerText = "\nMenn: " + menEmpCount + " / " + empPercentMen + "%\n" 
+                                                 + "Kvinner: " + womenEmpCount + " / " + empPercentWomen + "%";
 
-    // Calculate according to population of 2017 since education dataset ranges from 1970 - 2017
+    // Calculations according to population of 2017 since education dataset ranges from 1970 - 2017
     let eduPercentMen = disEducationData.higherShort.menForYear(2017);
     let eduPercentWomen = disEducationData.higherShort.womenForYear(2017);
     let menEduCount = Math.floor((disPopulationData.menForYear(2017) / 100) * eduPercentMen);
     let womenEduCount = Math.floor((disPopulationData.womenForYear(2017) / 100) * eduPercentWomen);
-    document.getElementById("dEducate").innerText = "(2017) Menn: " + menEduCount + " / " + eduPercentMen + "%\n" 
-                                                  + "(2017) Kvinner: " + womenEduCount + " / " + eduPercentWomen + "%";
+    document.getElementById("dEducate").innerText = "\nMenn: " + menEduCount + " / " + eduPercentMen + "%\n" 
+                                                  + "Kvinner: " + womenEduCount + " / " + eduPercentWomen + "%";
+}
 
-    // HISTORY SECTION
-    // Remove all history-elements if a new search takes place
+/**
+ * Populates the history section of the details-view after a search takes place
+ * @param disPopulationData population-data belonging to the given districtId
+ * @param disEmploymentData employment-data belonging to the given districtId
+ * @param disEducationData education-data belonging to the given districtId
+ */
+function populateDetailsHistory(disPopulationData, disEmploymentData, disEducationData) {
+    // Remove all old history-elements if a new search takes place
     while (detailHistoryContainer.hasChildNodes()) { detailHistoryContainer.removeChild(detailHistoryContainer.lastChild); }
     
     // Loops over data on intersection of years available to all datasets: 2007 - 2017
@@ -159,6 +201,8 @@ function populateDetails() {
         let eduCountMen = Math.floor((populationMen / 100) * eduPercentMen);
         let eduCountWomen = Math.floor((populationWomen / 100) * eduPercentWomen);
 
+        // Creates a new "history-block" from a "template" fetched from the DOM
+        // Feeds data to the elements within this block
         let detailBlock = detailElementTemplate.cloneNode(true);
         detailBlock.querySelector("#histYear").innerText = year;
         detailBlock.querySelector("#popMen").innerText = populationMen;
@@ -171,13 +215,17 @@ function populateDetails() {
     }
 }
 
-function populateComparison() {
+/**
+ * Handles the search in the comparison-view of the application and makes the appropriate calls
+ * to populate the view with data from the dataset object defined on the employmentData variable.
+ */
+function handleComparisonSearch() {
     let firstId = document.getElementById("compareNumInputOne").value;
     let secondId = document.getElementById("compareNumInputTwo").value;
     let firstDistrict = employmentData.getInfo(firstId);
     let secondDistrict = employmentData.getInfo(secondId);
 
-    // Error-handling for districtId inputs
+    // Display error to user if one of the data-lookups end up as undefined
     if (!firstDistrict) {
         document.getElementById("compareError").innerText = "Første kommune-nummer ikke gyldig";
         return;
@@ -188,38 +236,51 @@ function populateComparison() {
         document.getElementById("compareError").innerText = "";
     }
 
+    // Populate the section contained within the comparison-view with data from the search
+    populateComparisonHistory(firstDistrict, secondDistrict);
+}
+
+/**
+ * Populates the history section of the comparison-view after a search takes place
+ * @param firstDistrict employment-data belonging to the first districtId of the search
+ * @param secondDistrict employment-data belonging to the second districtId of the search
+ */
+function populateComparisonHistory(firstDistrict, secondDistrict) {
     // Remove all history-elements if a new search takes place
     while (compareHistoryContainer.hasChildNodes()) { compareHistoryContainer.removeChild(compareHistoryContainer.lastChild); }
 
     for (let year = 2005; year <= 2018; year++) {
-        let eduPercentMenFirst = firstDistrict.menForYear(year);
-        let eduPercentMenSecond = secondDistrict.menForYear(year);
-        let eduPercentWomenFirst = firstDistrict.womenForYear(year);
-        let eduPercentWomenSecond = secondDistrict.womenForYear(year);
+        let empPercentMenFirst = firstDistrict.menForYear(year);
+        let empPercentMenSecond = secondDistrict.menForYear(year);
+        let empPercentWomenFirst = firstDistrict.womenForYear(year);
+        let empPercentWomenSecond = secondDistrict.womenForYear(year);
 
+        // Creates a new "history-block" from a "template" fetched from the DOM
+        // Feeds data to the elements within this block
         let compareBlock = compareElementTemplate.cloneNode(true);
         compareBlock.querySelector("#compareYear").innerText = year;
         compareBlock.querySelector("#districtOne").innerText = firstDistrict.name;
         compareBlock.querySelector("#districtTwo").innerText = secondDistrict.name;
-        compareBlock.querySelector("#eduMenOne").innerText = eduPercentMenFirst;
-        compareBlock.querySelector("#eduMenTwo").innerText = eduPercentMenSecond;
-        compareBlock.querySelector("#eduWomenOne").innerText = eduPercentWomenFirst;
-        compareBlock.querySelector("#eduWomenTwo").innerText = eduPercentWomenSecond;
+        compareBlock.querySelector("#empWomenOne").innerText = empPercentWomenFirst;
+        compareBlock.querySelector("#empWomenTwo").innerText = empPercentWomenSecond;
+        compareBlock.querySelector("#empMenOne").innerText = empPercentMenFirst;
+        compareBlock.querySelector("#empMenTwo").innerText = empPercentMenSecond;
         compareHistoryContainer.appendChild(compareBlock);
 
-        // Skip comparison if displaying first year (no earlier statistics)
+        // Calculates percentage points and marks the correct DOM-elements by adding classes for css
+        // Skips comparison if displaying first year (no earlier statistics)
         if (year != 2005) {
-            let changePointsMenFirst =  eduPercentMenFirst - firstDistrict.menForYear(year - 1);
-            let changePointsMenSecond = eduPercentMenSecond - secondDistrict.menForYear(year - 1);
-            let changePointsWomenFirst = eduPercentWomenFirst - firstDistrict.womenForYear(year - 1);
-            let changePointsWomenSecond = eduPercentWomenSecond - secondDistrict.womenForYear(year - 1);
+            let changePointsMenFirst =  empPercentMenFirst - firstDistrict.menForYear(year - 1);
+            let changePointsMenSecond = empPercentMenSecond - secondDistrict.menForYear(year - 1);
+            let changePointsWomenFirst = empPercentWomenFirst - firstDistrict.womenForYear(year - 1);
+            let changePointsWomenSecond = empPercentWomenSecond - secondDistrict.womenForYear(year - 1);
             let changePointsDistrictOne = changePointsMenFirst + changePointsMenSecond;
             let changePointsDistrictTwo = changePointsWomenFirst + changePointsWomenSecond;
 
-            changePointsMenFirst > changePointsMenSecond ? compareBlock.querySelector("#eduMenOne").classList.add("blueBoldText")
-                                                         : compareBlock.querySelector("#eduMenTwo").classList.add("blueBoldText");
-            changePointsWomenFirst > changePointsWomenSecond ? compareBlock.querySelector("#eduWomenOne").classList.add("redBoldText")
-                                                             : compareBlock.querySelector("#eduWomenTwo").classList.add("redBoldText");
+            changePointsMenFirst > changePointsMenSecond ? compareBlock.querySelector("#empMenOne").classList.add("blueBoldText")
+                                                         : compareBlock.querySelector("#empMenTwo").classList.add("blueBoldText");
+            changePointsWomenFirst > changePointsWomenSecond ? compareBlock.querySelector("#empWomenOne").classList.add("redBoldText")
+                                                             : compareBlock.querySelector("#empWomenTwo").classList.add("redBoldText");
             changePointsDistrictOne > changePointsDistrictTwo ? compareBlock.querySelector("#districtOne").classList.add("greenBoldText")
                                                               : compareBlock.querySelector("#districtTwo").classList.add("greenBoldText");
         }
