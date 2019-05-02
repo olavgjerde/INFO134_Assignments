@@ -12,29 +12,29 @@ function EduDataset(contentUrl) {
 
 EduDataset.prototype = {
     /**
-     * Returns a list of all the district names contained within the dataset.
+     * @returns a list of all the district names contained within the dataset
      */
     getNames: function () {
         return this.nameList;
     },
     /**
-     * Returns a list of all the district-ids contained within the dataset.
+     * @returns a list of all the district-ids contained within the dataset
      */
     getIds: function () {
         return this.idList;
     },
     /**
-     * Returns an object with information about the district belonging
-     * to the id given as a parameter.
+     * Looks for information about a particular district in the object's "dictionary".
      * @param districtId id of the district to fetch information about
+     * @returns an object with information about particular district with the given id
      */
     getInfo: function (districtId) {
         return this.datasetDict[districtId];
     },
     /**
-     * Parses a response-object from the load-function into an object
-     * where the municipality-codes are the keys and the values for the various keys are:
-     * name of municipality and statistics for men & women sorted into education category.
+     * Parses a response-object from the load-function into an object where the 
+     * municipality-codes are the keys and the values individually represent:
+     * - statistics for men & women sorted into education category.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
      */
@@ -64,7 +64,7 @@ EduDataset.prototype = {
     },
     /**
      * Fetches a given dataset defined by the contentUrl that was set during
-     * the objects initialization.
+     * the objects initialization (constructor).
      */
     load: function () {
         let proto = this;

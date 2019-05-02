@@ -31,7 +31,7 @@ Filbeskrivelser
 2. Hvordan vet programmet deres når det tredje (siste) datasettet er lastet ned. Begrunn svaret deres. 
    (Henvis gjerne til en variabel, eller et sted i koden der dette er sikkert.)
 
-        Svar: Navigasjonsknappene setter i gang lasting av de ulike datasettene (se bruk av fetchPopulationData() o.l funksjoner i init() i folk.js),
+        Svar: Navigasjonsknappene setter i gang lasting av de ulike datasettene (se bruk av fetchStatisticalData() i init() i folk.js),
               på søkeknappene er onclick() definert slik at den sjekker om de nødvendige datasettene er definert. Skulle de ikke være definert
               når brukeren trykker på knappene vil ikke funksjoner som er avhengig av disse bli kjørt.
 

@@ -7,11 +7,18 @@ let sectionList = [introSection, overviewSection, detailsSection, comparisonSect
 let populationData, employmentData, educationData;
 let overviewPopulated = false;
 
-// Fetch DOM element to use as a template for history-elements in the details and comparison views
+// Fetch DOM elements to use as a templates for history-elements in the details and comparison views
 let detailHistoryContainer = document.getElementById("detailsHistory");
 let compareHistoryContainer = document.getElementById("compareHistory");
 let detailElementTemplate = detailHistoryContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
 let compareElementTemplate = compareHistoryContainer.getElementsByClassName("historyElement")[0].cloneNode(true);
+
+// Constant to work as enum for easier url-access
+const FetchType = {
+    "population": "http://wildboy.uib.no/~tpe056/folk/104857.json",
+    "employment": "http://wildboy.uib.no/~tpe056/folk/100145.json",
+    "education": "http://wildboy.uib.no/~tpe056/folk/85432.json"
+};
 
 /**
  * Sets the initial condition for the application
@@ -24,21 +31,21 @@ function init() {
     }
     document.getElementById("overviewButton").onclick = function () {
         toggleSectionVisibility(overviewSection);
-        if (!populationData) fetchPopulationData(populateOverview);
+        if (!populationData) populationData = fetchStatisticalData(FetchType.population, CommonDataset, populateOverview);
         else if (!overviewPopulated) populateOverview();
     }
     document.getElementById("detailsButton").onclick = function () {
         toggleSectionVisibility(detailsSection);
-        if (!populationData) fetchPopulationData();
-        if (!employmentData) fetchEmploymentData();
-        if (!educationData) fetchEducationData();
+        if (!populationData) populationData = fetchStatisticalData(FetchType.population, CommonDataset);
+        if (!employmentData) employmentData = fetchStatisticalData(FetchType.employment, CommonDataset);
+        if (!educationData) educationData = fetchStatisticalData(FetchType.education, EduDataset);
     }
     document.getElementById("comparisonButton").onclick = function () {
         toggleSectionVisibility(comparisonSection);
-        if (!employmentData) fetchEmploymentData();
+        if (!employmentData) educationData = fetchStatisticalData(FetchType.education, EduDataset);
     }
 
-    // Both events check that the required data has loaded before trying to execute
+    // Both events check that the required data has loaded before trying to execute after button-click
     document.getElementById("detailsSubmit").onclick = function() {
         if (populationData && employmentData && educationData) handleDetailsSearch();
     }
@@ -52,36 +59,18 @@ function init() {
 }
 
 /**
- * Creates a new CommonDataset with the url-resource belonging to the population-data,
- * then sets the onload-function and finally calls load() on the new object.
+ * Creates a new Dataset (based on constructor) with the url from the url-parameter,
+ * then sets the onload-function and then calls load() on the new object.
+ * @param url resource that should be passed to the datasetConstructor
+ * @param datasetContructor specifies which type of object to create
  * @param onloadFunction function to be set as the onload-function for the new Dataset-object
+ * @returns a new Dataset-object
  */
-function fetchPopulationData(onloadFunction) {
-    populationData = new CommonDataset("http://wildboy.uib.no/~tpe056/folk/104857.json");
-    populationData.onload = onloadFunction;
-    populationData.load();
-}
-
-/**
- * Creates a new CommonDataset with the url-resource belonging to the employment-data,
- * then sets the onload-function and finally calls load() on the new object.
- * @param onloadFunction function to be set as the onload-function for the new Dataset-object
- */
-function fetchEmploymentData(onloadFunction) {
-    employmentData = new CommonDataset("http://wildboy.uib.no/~tpe056/folk/100145.json");
-    employmentData.onload = onloadFunction;
-    employmentData.load();
-}
-
-/**
- * Creates a new EduDataset with the url-resource belonging to the education-data,
- * then sets the onload-function and finally calls load() on the new object.
- * @param onloadFunction function to be set as the onload-function for the new Dataset-object
- */
-function fetchEducationData(onloadFunction) {
-    educationData = new EduDataset("http://wildboy.uib.no/~tpe056/folk/85432.json");
-    educationData.onload = onloadFunction;
-    educationData.load();
+function fetchStatisticalData(url, datasetContructor, onloadFunction) {
+    let dataset = new datasetContructor(url);
+    dataset.onload = onloadFunction;
+    dataset.load();
+    return dataset;
 }
 
 /**
@@ -199,18 +188,18 @@ function populateDetailsHistory(disPopulationData, disEmploymentData, disEducati
         // Creates a new "history-block" from a "template" fetched from the DOM
         // Feeds data to the elements within this block
         let detailBlock = detailElementTemplate.cloneNode(true);
-        detailBlock.querySelector("#histYear").innerText = year;
-        detailBlock.querySelector("#popMen").innerText = populationMen;
-        detailBlock.querySelector("#popWomen").innerText = populationWomen;
-        detailBlock.querySelector("#empMen").innerText = empCountMen + " / " + empPercentMen;
-        detailBlock.querySelector("#empWomen").innerText = empCountWomen + " / " + empPercentWomen;
+        detailBlock.querySelector(".histYear").innerText = year;
+        detailBlock.querySelector(".popMen").innerText = populationMen;
+        detailBlock.querySelector(".empMen").innerText = empCountMen + " / " + empPercentMen;
+        detailBlock.querySelector(".popWomen").innerText = populationWomen;
+        detailBlock.querySelector(".empWomen").innerText = empCountWomen + " / " + empPercentWomen;
 
         for (let educationLevel in disEducationData) {
             let statistics = calculateEducationNumbers(year, populationMen, populationWomen, disEducationData[educationLevel]);
-            detailBlock.querySelector("#" + educationLevel + "Men").innerText = statistics.countMen + " / " + statistics.percentMen;
-            detailBlock.querySelector("#" + educationLevel + "Women").innerText = statistics.countMen + " / " + statistics.percentMen;
+            detailBlock.querySelector("." + educationLevel + "Men").innerText = statistics.countMen + " / " + statistics.percentMen;
+            detailBlock.querySelector("." + educationLevel + "Women").innerText = statistics.countWomen + " / " + statistics.percentWomen;
         }
-
+        
         detailHistoryContainer.appendChild(detailBlock);
     }
 }
@@ -274,13 +263,13 @@ function populateComparisonHistory(firstDistrict, secondDistrict) {
         // Creates a new "history-block" from a "template" fetched from the DOM
         // Feeds data to the elements within this block
         let compareBlock = compareElementTemplate.cloneNode(true);
-        compareBlock.querySelector("#compareYear").innerText = year;
-        compareBlock.querySelector("#districtOne").innerText = firstDistrict.name;
-        compareBlock.querySelector("#districtTwo").innerText = secondDistrict.name;
-        compareBlock.querySelector("#empWomenOne").innerText = empPercentWomenFirst;
-        compareBlock.querySelector("#empWomenTwo").innerText = empPercentWomenSecond;
-        compareBlock.querySelector("#empMenOne").innerText = empPercentMenFirst;
-        compareBlock.querySelector("#empMenTwo").innerText = empPercentMenSecond;
+        compareBlock.querySelector(".compareYear").innerText = year;
+        compareBlock.querySelector(".districtOne").innerText = firstDistrict.name;
+        compareBlock.querySelector(".districtTwo").innerText = secondDistrict.name;
+        compareBlock.querySelector(".empWomenOne").innerText = empPercentWomenFirst;
+        compareBlock.querySelector(".empWomenTwo").innerText = empPercentWomenSecond;
+        compareBlock.querySelector(".empMenOne").innerText = empPercentMenFirst;
+        compareBlock.querySelector(".empMenTwo").innerText = empPercentMenSecond;
         compareHistoryContainer.appendChild(compareBlock);
 
         // Calculates percentage points and marks the correct DOM-elements by adding classes for css
@@ -293,12 +282,12 @@ function populateComparisonHistory(firstDistrict, secondDistrict) {
             let changePointsDistrictOne = changePointsMenFirst + changePointsMenSecond;
             let changePointsDistrictTwo = changePointsWomenFirst + changePointsWomenSecond;
 
-            changePointsMenFirst > changePointsMenSecond ? compareBlock.querySelector("#empMenOne").classList.add("blueBoldText")
-                                                         : compareBlock.querySelector("#empMenTwo").classList.add("blueBoldText");
-            changePointsWomenFirst > changePointsWomenSecond ? compareBlock.querySelector("#empWomenOne").classList.add("redBoldText")
-                                                             : compareBlock.querySelector("#empWomenTwo").classList.add("redBoldText");
-            changePointsDistrictOne > changePointsDistrictTwo ? compareBlock.querySelector("#districtOne").classList.add("greenBoldText")
-                                                              : compareBlock.querySelector("#districtTwo").classList.add("greenBoldText");
+            changePointsMenFirst > changePointsMenSecond ? compareBlock.querySelector(".empMenOne").classList.add("blueBoldText")
+                                                         : compareBlock.querySelector(".empMenTwo").classList.add("blueBoldText");
+            changePointsWomenFirst > changePointsWomenSecond ? compareBlock.querySelector(".empWomenOne").classList.add("redBoldText")
+                                                             : compareBlock.querySelector(".empWomenTwo").classList.add("redBoldText");
+            changePointsDistrictOne > changePointsDistrictTwo ? compareBlock.querySelector(".districtOne").classList.add("greenBoldText")
+                                                              : compareBlock.querySelector(".districtTwo").classList.add("greenBoldText");
         }
     }
 }

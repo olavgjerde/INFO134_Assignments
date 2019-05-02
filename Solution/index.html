@@ -5,9 +5,9 @@
     <meta charset="utf-8">
     <title>Folk</title>
     <link rel="stylesheet" type="text/css" href="css/folk.css">
-    <script defer src="js/folk.js" charset="utf-8"></script>
-    <script defer src="js/CommonDataset.js" charset="utf-8"></script>
-    <script defer src="js/EduDataset.js" charset="utf-8"></script>
+    <script defer src="js/folk.js"></script>
+    <script defer src="js/CommonDataset.js"></script>
+    <script defer src="js/EduDataset.js"></script>
 </head>
 
 <body onload="init();">
@@ -21,7 +21,6 @@
             <button id="comparisonButton">Sammenligning</button>
         </nav>
     </header>
-
 
     <!-- Main content -->
     <div id="contentContainer">
@@ -81,48 +80,51 @@
 
             <h2>Historikk</h2>
             <div id="detailsHistory">
+                <!-- History elements are cloned multiple times by our javascript - hence we use classes for the different 
+                     sub elements instead of ids which would not be unique unless we renamed them after cloning,
+                     and we do not need individual access to the elements after creation.  -->
                 <div class="historyElement">
-                    <h3 id="histYear">ÅR</h3>
+                    <h3 class="histYear">ÅR</h3>
                     <label>Populasjon</label>
                     <ul>
-                        <li>Menn: <span id="popMen">--- </span></li>
-                        <li>Kvinner: <span id="popWomen">--- </span></li>
+                        <li>Menn: <span class="popMen">--- </span></li>
+                        <li>Kvinner: <span class="popWomen">--- </span></li>
                     </ul>
                     <label>Sysselsetting</label>
                     <ul>
-                        <li>Menn: <span id="empMen">--- </span>%</li>
-                        <li>Kvinner: <span id="empWomen">--- </span>%</li>
+                        <li>Menn: <span class="empMen">--- </span>%</li>
+                        <li>Kvinner: <span class="empWomen">--- </span>%</li>
                     </ul>
                     <label>Utdanning</label>
                     <p>Grunnskole</p>
                     <ul>
-                        <li>Menn: <span id="primarySchoolMen">--- </span>%</li>
-                        <li>Kvinner: <span id="primarySchoolWomen">--- </span>%</li>
+                        <li>Menn: <span class="primarySchoolMen">--- </span>%</li>
+                        <li>Kvinner: <span class="primarySchoolWomen">--- </span>%</li>
                     </ul>
                     <p>Videregående</p>
                     <ul>
-                        <li>Menn: <span id="highSchoolMen">--- </span>%</li>
-                        <li>Kvinner: <span id="highSchoolWomen">--- </span>%</li>
+                        <li>Menn: <span class="highSchoolMen">--- </span>%</li>
+                        <li>Kvinner: <span class="highSchoolWomen">--- </span>%</li>
                     </ul>
                     <p>Høyere utdanning (kort)</p>
                     <ul>
-                        <li>Menn: <span id="higherShortMen">--- </span>%</li>
-                        <li>Kvinner: <span id="higherShortWomen">--- </span>%</li>
+                        <li>Menn: <span class="higherShortMen">--- </span>%</li>
+                        <li>Kvinner: <span class="higherShortWomen">--- </span>%</li>
                     </ul>
                     <p>Høyere utdanning (lang)</p>
                     <ul>
-                        <li>Menn: <span id="higherLongMen">--- </span>%</li>
-                        <li>Kvinner: <span id="higherLongWomen">--- </span>%</li>
+                        <li>Menn: <span class="higherLongMen">--- </span>%</li>
+                        <li>Kvinner: <span class="higherLongWomen">--- </span>%</li>
                     </ul>
                     <p>Uoppgitt</p>
                     <ul>
-                        <li>Menn: <span id="undefinedEduMen">--- </span>%</li>
-                        <li>Kvinner: <span id="undefinedEduWomen">--- </span>%</li>
+                        <li>Menn: <span class="undefinedEduMen">--- </span>%</li>
+                        <li>Kvinner: <span class="undefinedEduWomen">--- </span>%</li>
                     </ul>
                     <p>Fagskole</p>
                     <ul>
-                        <li>Menn: <span id="vocationalMen">--- </span>%</li>
-                        <li>Kvinner: <span id="vocationalWomen">--- </span>%</li>
+                        <li>Menn: <span class="vocationalMen">--- </span>%</li>
+                        <li>Kvinner: <span class="vocationalWomen">--- </span>%</li>
                     </ul>
                 </div>
             </div>
@@ -143,21 +145,25 @@
 
             <h2>Historikk</h2>
             <div id="compareHistory">
+                <!-- History elements are cloned multiple times by our javascript - hence we use classes for the different 
+                     sub elements instead of ids which would not be unique unless we renamed them after cloning,
+                     and we do not need individual access to the elements after creation.  -->
                 <div class="historyElement">
-                    <h3 id="compareYear">ÅR</h3>
-                    <label>Sysselsetting i <span id="districtOne">Kommune 1</span></label>
+                    <h3 class="compareYear">ÅR</h3>
+                    <label>Sysselsetting i <span class="districtOne">Kommune 1</span></label>
                     <ul>
-                        <li>Menn: <span id="empMenOne">--- </span>%</li>
-                        <li>Kvinner: <span id="empWomenOne">--- </span>%</li>
+                        <li>Menn: <span class="empMenOne">--- </span>%</li>
+                        <li>Kvinner: <span class="empWomenOne">--- </span>%</li>
                     </ul>
-                    <label>Sysselsetting i <span id="districtTwo">Kommune 2</span></label>
+                    <label>Sysselsetting i <span class="districtTwo">Kommune 2</span></label>
                     <ul>
-                        <li>Menn: <span id="empMenTwo">--- </span>%</li>
-                        <li>Kvinner: <span id="empWomenTwo">--- </span>%</li>
+                        <li>Menn: <span class="empMenTwo">--- </span>%</li>
+                        <li>Kvinner: <span class="empWomenTwo">--- </span>%</li>
                     </ul>
                 </div>
             </div>
         </section>
+        
     </div>
 
     <!-- Footer with project info -->
