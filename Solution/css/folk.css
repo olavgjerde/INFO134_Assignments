@@ -51,16 +51,14 @@ body, html {
 }
 
 #ssbButtons button {
+    padding: 1em;
+    margin-right: 1em;
+    margin-bottom: 1em;
+    border-radius: 0.5em;
+    border: solid 2px white;
+    box-shadow: 0 8px 10px 0 black;
+    color: #DBFFF8;
     background-color: #37403E;
-    border: none;
-    color:#DBFFF8;
-    padding: 15px 32px;
-    text-align: center;
-    text-decoration: none;
-    font-size: 16px; 
-    margin: 0.5em;
-    flex-direction: row;
-    justify-content: center;
 }
 
 #ssbButtons button:hover {
