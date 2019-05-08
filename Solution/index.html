@@ -41,13 +41,13 @@
                 <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/104857?lang=no';">Befolkning: Datasett nummer 104857</button>
                 <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/100145?lang=no';">Sysselsatte: Datasett nummer 100145</button>
                 <button onclick="window.location.href = 'http://data.ssb.no/api/v0/dataset/85432?lang=no';">Utdanning: Datasett nummer 85432</button>
-
             </div>
         </section>
 
         <!-- OVERVIEW-VIEW OF APPLICATION BELOW -->
         <section id="overview">
             <h1>Oversikt</h1>
+            <!-- Table to be populated by populateOverview() in folks.js -->
             <table>
                 <thead>
                     <tr>
@@ -82,7 +82,7 @@
             <div id="detailsHistory">
                 <!-- History elements are cloned multiple times by our javascript - hence we use classes for the different 
                      sub elements instead of ids which would not be unique unless we renamed them after cloning,
-                     and we do not need individual access to the elements after creation.  -->
+                     we chose this solution since we do not need individual access to the elements after creation.  -->
                 <div class="historyElement">
                     <h3 class="histYear">ÅR</h3>
                     <label>Populasjon</label>
@@ -147,7 +147,7 @@
             <div id="compareHistory">
                 <!-- History elements are cloned multiple times by our javascript - hence we use classes for the different 
                      sub elements instead of ids which would not be unique unless we renamed them after cloning,
-                     and we do not need individual access to the elements after creation.  -->
+                     we chose this solution since we do not need individual access to the elements after creation.  -->
                 <div class="historyElement">
                     <h3 class="compareYear">ÅR</h3>
                     <label>Sysselsetting i <span class="districtOne">Kommune 1</span></label>

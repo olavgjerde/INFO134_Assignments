@@ -1,4 +1,4 @@
-/* Theme colors: #A4BFBA #6E807C #DBFFF8 #37403E #C8E8E2 */
+/* STYLE FOOR ROOT */
 
 body, html {
     height: 100%;
@@ -6,6 +6,8 @@ body, html {
     font-family: "Segoe UI Symbol", sans-serif;
     background-color: #A4BFBA;
 }
+
+/* SHARED STYLING FOR NAVIGATION AND CONTENT-CONTAINER */
 
 #banner {
     margin-bottom: 1em;
@@ -50,6 +52,17 @@ body, html {
     background-color: #C8E8E2;
 }
 
+#contentContainer {
+    display: block;
+    box-shadow: 0 0 2px black;
+    padding: 2em;
+    margin-bottom: 2em;
+    color: #37403E;
+    background-color: #DBFFF8;
+}
+
+/* STYLE FOR INTRODUCTION-VIEW */
+
 #ssbButtons button {
     padding: 1em;
     margin-right: 1em;
@@ -67,14 +80,7 @@ body, html {
     background-color: #C8E8E2;
 }
 
-#contentContainer {
-    display: block;
-    box-shadow: 0 0 2px black;
-    padding: 2em;
-    margin-bottom: 2em;
-    color: #37403E;
-    background-color: #DBFFF8;
-}
+/* STYLE FOR OVERVIEW-VIEW */
 
 #overview table, td {
     margin: 0 auto;
@@ -86,6 +92,8 @@ body, html {
     background-color: #37403E;
     color: #DBFFF8;
 }
+
+/* SHARED STYLING FOR DETAILS- AND COMPARISON-VIEW */
 
 #detailsHistory, #compareHistory {
     display: flex;
@@ -121,6 +129,8 @@ body, html {
 .historyElement p, ul {
     margin: 0.25em 0 0.25em 0;
 }
+
+/* SHARED STYLE FOR FOOTER*/
 
 footer {
     position: fixed;

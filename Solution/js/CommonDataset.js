@@ -1,7 +1,7 @@
 /**
  * A CommonDataset object is meant to function as an interface against:
- *  - The population dataset (http://wildboy.uib.no/~tpe056/folk/104857.json)
- *  - The employment dataset (http://wildboy.uib.no/~tpe056/folk/100145.json)
+ *  The population dataset (http://wildboy.uib.no/~tpe056/folk/104857.json)
+ *  The employment dataset (http://wildboy.uib.no/~tpe056/folk/100145.json)
  * @param contentUrl the url of the resource that this object should fetch
  */
 function CommonDataset(contentUrl) {
@@ -35,7 +35,7 @@ CommonDataset.prototype = {
     /**
      * Parses a response-object from the load-function into an object where the 
      * municipality-codes are the keys and the values for the various keys are:
-     * - name of municipality, statistics for men, and statistics for women.
+     * name of municipality, statistics for men, and statistics for women.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
      */
@@ -46,6 +46,9 @@ CommonDataset.prototype = {
             this.nameList.push(districtName);
             this.idList.push(districtId);
 
+            // Object created can be retreived via the getInfo() method,
+            // and has 'keys' for information about a particular district,
+            // and also helper function to help fetch statistical-data.
             this.datasetDict[districtId] = {
                  "name": districtName,
 		         "men": rootElement[districtName]["Menn"],
@@ -53,7 +56,7 @@ CommonDataset.prototype = {
                  "combo": rootElement[districtName]["Begge kjønn"],
                  "menForYear": function(year) { return this.men[year] },
                  "womenForYear": function(year) { return this.women[year] },
-                 // These functions assume correct order within json (asc. by year)
+                 // These functions assume correct order within retrieved json (asc. by year)
                  "menLatest": function () { return this.men[Object.keys(this.men)[Object.keys(this.men).length - 1]]},
                  "womenLatest": function() { return this.women[Object.keys(this.women)[Object.keys(this.women).length - 1]]},
                  "comboLatest": function() { if (this.combo) return this.combo[Object.keys(this.combo)[Object.keys(this.combo).length - 1]]}

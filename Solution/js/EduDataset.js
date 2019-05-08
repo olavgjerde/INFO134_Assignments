@@ -1,6 +1,6 @@
 /**
  * An EduDataset object is meant to function as an interface against:
- *  - The education dataset (http://wildboy.uib.no/~tpe056/folk/85432.json)
+ * The education dataset (http://wildboy.uib.no/~tpe056/folk/85432.json)
  * @param contentUrl the url of the resource that this object should fetch
  */
 function EduDataset(contentUrl) {
@@ -34,7 +34,7 @@ EduDataset.prototype = {
     /**
      * Parses a response-object from the load-function into an object where the 
      * municipality-codes are the keys and the values individually represent:
-     * - statistics for men & women sorted into education category.
+     * statistics for men & women sorted into education category.
      * It calls onload() after parsing, if this function is defined.
      * @param responseObject object that will be parsed (see load function)
      */
@@ -45,11 +45,16 @@ EduDataset.prototype = {
             this.nameList.push(districtName);
             this.idList.push(districtId);
 
+            // Object created can be retreived via the getInfo() method,
+            // and has 'keys' for every education level in a district.
             let educationInfo = {}
             for (let innerKey in rootElement[districtName]) {
                 if (innerKey == "kommunenummer") continue;
                 let educationLevel = educationMapper[innerKey];
+                
                 // Creates an object to represent education-level
+                // Contains helper functions to easily fetch statistical-data
+                // for a education-level within a district.
                 educationInfo[educationLevel] = {
                     "men": rootElement[districtName][innerKey]["Menn"],
                     "women": rootElement[districtName][innerKey]["Kvinner"],
@@ -57,7 +62,6 @@ EduDataset.prototype = {
                     "womenForYear": function(year) { return this.women[year] },
                 }
             }
-            
             this.datasetDict[districtId] = educationInfo;
         }
         if (this.onload) this.onload();

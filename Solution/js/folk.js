@@ -1,9 +1,11 @@
+// Define all 4 sections on global variables and put the in a list
 let introSection = document.getElementById("introduction");
 let overviewSection = document.getElementById("overview");
 let detailsSection = document.getElementById("details");
 let comparisonSection = document.getElementById("comparison");
 let sectionList = [introSection, overviewSection, detailsSection, comparisonSection];
 
+// Variables which will contain the different datasets after they have been loaded
 let populationData, employmentData, educationData;
 let overviewPopulated = false;
 
@@ -22,8 +24,8 @@ const FetchType = {
 
 /**
  * Sets the initial condition for the application
- *  1. Hide all sections except the introduction
- *  2. Add eventlisteners where needed
+ *  1. Add eventlisteners where needed which fetch datasets and handles searches
+ *  2. Hide all sections except the introduction
  */
 function init() {
     document.getElementById("introButton").onclick = function () {
