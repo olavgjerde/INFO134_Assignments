@@ -76,6 +76,7 @@ EduDataset.prototype = {
         request.onreadystatechange = function () {
             if (request.readyState == 4 && request.status == 200) {
                 proto.parseContent(JSON.parse(request.responseText));
+                // onload() gets called within parseContent()
             }
         }
         request.open("GET", this.contentUrl);
