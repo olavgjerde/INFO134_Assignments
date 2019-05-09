@@ -44,7 +44,7 @@ function init() {
     }
     document.getElementById("comparisonButton").onclick = function () {
         toggleSectionVisibility(comparisonSection);
-        if (!employmentData) educationData = fetchStatisticalData(FetchType.education, EduDataset);
+        if (!employmentData) employmentData = fetchStatisticalData(FetchType.employment, CommonDataset);
     }
 
     // Both events check that the required data has loaded before trying to execute after button-click

@@ -66,7 +66,7 @@
    Dere trenger ikke å legge ved ekstra kode hvis dere har skrevet kode for å svare på dette spørsmålet,
    men bare forklare fremgangsmåten deres.**
 
-      Svar: Alle datasettene har ikke nøyaktig de samme kommunene, dette kan man f.eks skjekke på variablene vi selv initialiserer i "detaljer"-seksjonen. 
+      Svar: Alle datasettene har ikke nøyaktig de samme kommunene, dette kan man f.eks skjekke på variablene vi selv initialiserer i "detaljer"-seksjonen.
       Om du i konsollen her skriver: "populationData.getIds().length == employmentData.getIds().length == educationData.getIds().length;"
       Så vil dette returnere "false", og de er dermed ulike - siden getIds() innehold alle kommune nummer for de ulike settene.
       (Utdanningdatasettet er forsåvidt det største etter det vi undersøkte)
