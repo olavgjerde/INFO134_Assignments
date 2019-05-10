@@ -74,11 +74,15 @@ EduDataset.prototype = {
         let proto = this;
         let request = new XMLHttpRequest();
         request.onreadystatechange = function () {
-            if (request.readyState == 4 && request.status == 200) {
+            if (request.status == 404) throw new Error("Resource could not be found on the requested domain " + proto.contentUrl);
+            else if (request.readyState == 4 && request.status == 200) {
                 proto.parseContent(JSON.parse(request.responseText));
                 // onload() gets called within parseContent()
             }
         }
+        request.addEventListener("error", function() {
+            throw new Error("There was a problem loading the dataset-resource for " + proto.contentUrl);
+        })
         request.open("GET", this.contentUrl);
         request.send();
     },
